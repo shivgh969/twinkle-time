@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ TWINKLE TIME ✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hero-gradient {
+            background: linear-gradient(135deg, #6b21a8 0%, #a855f7 50%, #ec4899 100%);
+        }
+        .btn-gradient {
+            background: linear-gradient(90deg, #9333ea 0%, #db2777 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #9333ea 0%, #db2777 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- TOP NAVBAR -->
+    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-slate-100 px-4 py-3 shadow-sm">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center space-x-2">
+                <span class="text-xl">✨</span>
+                <span class="font-black text-base sm:text-lg tracking-tight text-gradient">TWINKLE TIME</span>
+            </a>
+
+            <!-- Nav Links & Admin/Lang -->
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div class="hidden md:flex space-x-3 text-xs font-bold text-slate-600">
+                    <a href="#products" class="hover:text-purple-600">Products</a>
+                    <a href="#creators" class="hover:text-purple-600">Creators</a>
+                    <a href="#location" class="hover:text-purple-600">Location</a>
+                </div>
+
+                <!-- Language Selector Dropdown -->
+                <div class="flex items-center space-x-1 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-200">
+                    <span class="text-xs">🌐</span>
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="text-[11px] font-bold text-purple-900 bg-transparent outline-none cursor-pointer">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="pa">ਪੰਜਾਬੀ</option>
+                        <option value="bho">भोजपुरी</option>
+                    </select>
+                </div>
+
+                <!-- Owner Login Button -->
+                <a href="admin.html" class="bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded-full text-[11px] font-bold transition flex items-center space-x-1 shadow-sm">
+                    <span>👑</span>
+                    <span id="txtAdminLogin" class="hidden sm:inline">Owner Login</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION (Matches Exact Video Style) -->
+    <header class="hero-gradient text-white px-4 py-10 sm:py-14 text-center relative overflow-hidden">
+        <div class="max-w-3xl mx-auto space-y-4 relative z-10">
+            
+            <!-- Top Badge -->
+            <div class="inline-flex items-center space-x-1.5 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/30 text-[11px] font-extrabold tracking-wide uppercase">
+                <span>💼</span>
+                <span id="txtHeroBadge">BUSINESS BLASTER STUDENT ENTERPRISE</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight drop-shadow-md">
+                ✨ TWINKLE TIME ✨
+            </h1>
+
+            <!-- School Subtitle -->
+            <p class="text-xs sm:text-sm font-bold text-purple-100 flex items-center justify-center space-x-1">
+                <span>🏫</span>
+                <span id="txtSchoolName">Government Senior Secondary School Mubarakpur</span>
+            </p>
+
+            <!-- Quote Box -->
+            <div class="bg-white/95 text-slate-800 rounded-2xl sm:rounded-full py-2.5 px-6 shadow-xl max-w-xl mx-auto border border-purple-100">
+                <p id="txtQuote" class="text-xs sm:text-sm font-bold italic text-slate-700">
+                    “Made by Students • Created with Creativity • Served with Smile”
+                </p>
+            </div>
+
+            <!-- Explore Button -->
+            <div class="pt-2">
+                <a href="#products" id="btnExplore" class="inline-flex items-center space-x-2 bg-white text-purple-900 hover:bg-purple-50 font-black text-xs sm:text-sm px-6 py-3 rounded-full shadow-lg transition transform hover:scale-105">
+                    <span>🛍️</span>
+                    <span>Explore Products</span>
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- MAIN STORE SECTION -->
+    <main class="max-w-4xl mx-auto w-full px-4 py-10 space-y-12 flex-grow">
+
+        <!-- SECTION 1: PRODUCTS -->
+        <section id="products" class="space-y-6 scroll-mt-20">
+            <div class="text-center space-y-1">
+                <span class="bg-purple-100 text-purple-700 text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase">STORE FRONT</span>
+                <h2 id="txtOurProducts" class="text-2xl font-black text-slate-900 tracking-tight">Our Special Products</h2>
+                <div class="w-12 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full mt-1"></div>
+            </div>
+
+            <!-- Dynamic Products Grid -->
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Products dynamically inserted via JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: CREATORS -->
+        <section id="creators" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm text-center space-y-4 scroll-mt-20">
+            <span class="bg-purple-100 text-purple-700 text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase">BEHIND THE PROJECT</span>
+            <h2 id="txtMeetCreators" class="text-xl font-black text-slate-900">Meet Our Creators</h2>
+            <p id="txtCreatorsSub" class="text-xs text-slate-500 font-semibold max-w-md mx-auto">जिन होनहार छात्रों ने इस प्रोजेक्ट को मिलकर बनाया है</p>
+
+            <div id="creatorPosterBox" class="mt-4 rounded-2xl overflow-hidden border border-purple-100 bg-purple-50/50 p-6 flex flex-col items-center justify-center">
+                <img id="creatorPoster" src="" class="hidden w-full max-h-96 object-cover rounded-xl shadow-sm">
+                <p id="noPosterMsg" class="text-xs font-bold text-purple-700">✨ ऑनर पैनल (admin.html) में जाकर अपनी टीम की बड़ी फोटो या पोस्टर अपलोड करें!</p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: LOCATION -->
+        <section id="location" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm text-center space-y-4 scroll-mt-20">
+            <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto text-2xl">🏫</div>
+            <div>
+                <h2 id="txtVisitStore" class="text-xl font-black text-slate-900">Visit Our Store / School</h2>
+                <p id="dispLocName" class="text-xs font-bold text-slate-500 mt-1">Government Senior Secondary School Mubarakpur</p>
+            </div>
+
+            <a id="dispMapBtn" href="https://maps.google.com/?q=Government+Senior+Secondary+School+Mubarakpur" target="_blank" class="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs px-6 py-3 rounded-full shadow-md transition">
+                <span>📍</span>
+                <span id="txtOpenMap">Open Location in Google Maps</span>
+            </a>
+        </section>
+
+    </main>
+
+    <!-- FOOTER (Matches Video Black Footer) -->
+    <footer class="bg-slate-950 text-white py-8 px-4 text-center space-y-3">
+        <div class="text-xs font-black tracking-wide flex items-center justify-center space-x-2">
+            <span>✨ TWINKLE TIME • Business Blaster Enterprise</span>
+        </div>
+        <div class="inline-block bg-slate-900 border border-slate-800 rounded-full px-4 py-1.5 text-[11px] font-semibold text-slate-300">
+            📧 <span id="txtContactOwner">Contact Owner: twinkletime@gmail.com</span>
+        </div>
+    </footer>
+
+    <!-- ORDER MODAL -->
+    <div id="orderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative border border-slate-100">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+            
+            <h3 id="txtOrderHeader" class="text-lg font-black text-slate-900 mb-1">Place Your Order</h3>
+            <p id="modalProdName" class="text-xs font-bold text-purple-600 mb-4"></p>
+
+            <form onsubmit="submitOrder(event)" class="space-y-3">
+                <div>
+                    <label id="lblYourName" class="block text-xs font-bold text-slate-700 mb-1">Your Name</label>
+                    <input type="text" id="custName" required placeholder="Enter full name" class="w-full border border-slate-200 bg-slate-50 rounded-xl p-2.5 text-xs outline-purple-500 font-semibold">
+                </div>
+
+                <div>
+                    <label id="lblPhone" class="block text-xs font-bold text-slate-700 mb-1">Phone Number</label>
+                    <input type="tel" id="custPhone" required placeholder="10-digit Mobile Number" class="w-full border border-slate-200 bg-slate-50 rounded-xl p-2.5 text-xs outline-purple-500 font-semibold">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label id="lblQty" class="block text-xs font-bold text-slate-700 mb-1">Quantity</label>
+                        <input type="number" id="custQty" min="1" value="1" oninput="calcTotal()" class="w-full border border-slate-200 bg-slate-50 rounded-xl p-2.5 text-xs outline-purple-500 font-black text-center">
+                    </div>
+                    <div>
+                        <label id="lblTotal" class="block text-xs font-bold text-slate-700 mb-1">Total Amount</label>
+                        <div id="modalTotalPrice" class="bg-purple-50 border border-purple-100 text-purple-700 font-black rounded-xl p-2.5 text-xs flex items-center justify-center">₹0</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label id="lblNote" class="block text-xs font-bold text-slate-700 mb-1">Note (Optional)</label>
+                    <input type="text" id="custNote" placeholder="Any special instruction" class="w-full border border-slate-200 bg-slate-50 rounded-xl p-2.5 text-xs outline-purple-500 font-semibold">
+                </div>
+
+                <button type="submit" id="btnConfirmOrder" class="w-full btn-gradient text-white font-black py-3 rounded-xl shadow-md text-xs transition mt-2">
+                    Confirm Order 🚀
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TRANSLATIONS & SCRIPT -->
+    <script>
+        const translations = {
+            en: {
+                adminLogin: "Owner Login",
+                heroBadge: "BUSINESS BLASTER STUDENT ENTERPRISE",
+                quote: "“Made by Students • Created with Creativity • Served with Smile”",
+                explore: "Explore Products",
+                ourProducts: "Our Special Products",
+                buyNow: "Order Now",
+                meetCreators: "Meet Our Creators",
+                creatorsSub: "Honnar students who created this business blaster project together",
+                visitStore: "Visit Our Store / School",
+                openMap: "Open Location in Google Maps",
+                orderHeader: "Place Your Order",
+                yourName: "Your Name",
+                phone: "Phone Number",
+                qty: "Quantity",
+                total: "Total Amount",
+                note: "Note (Optional)",
+                confirmOrder: "Confirm Order 🚀"
+            },
+            hi: {
+                adminLogin: "मालिक लॉगिन",
+                heroBadge: "बिजनेस ब्लास्टर स्टूडेंट एंटरप्राइज",
+                quote: "“छात्रों द्वारा निर्मित • रचनात्मकता के साथ निर्मित • मुस्कान के साथ प्रस्तुत”",
+                explore: "प्रोडक्ट्स देखें",
+                ourProducts: "हमारे खास प्रोडक्ट्स",
+                buyNow: "अभी आर्डर करें",
+                meetCreators: "हमारी टीम से मिलें",
+                creatorsSub: "जिन होनहार छात्रों ने इस प्रोजेक्ट को मिलकर बनाया है",
+                visitStore: "हमारे स्टोर / स्कूल आएं",
+                openMap: "गूगल मैप्स में लोकेशन खोलें",
+                orderHeader: "अपना ऑर्डर दें",
+                yourName: "आपका नाम",
+                phone: "फोन नंबर",
+                qty: "मात्रा",
+                total: "कुल कीमत",
+                note: "नोट (ऐच्छिक)",
+                confirmOrder: "ऑर्डर पक्का करें 🚀"
+            },
+            pa: {
+                adminLogin: "ਮਾਲਕ ਲੌਗਇਨ",
+                heroBadge: "ਬਿਜ਼ਨਸ ਬਲਾਸਟਰ ਸਟੂਡੈਂਟ ਐਂਟਰਪ੍ਰਾਈਜ਼",
+                quote: "“ਵਿਦਿਆਰਥੀਆਂ ਦੁਆਰਾ ਬਣਾਇਆ • ਰਚਨਾਤਮਕਤਾ ਨਾਲ ਤਿਆਰ • ਮੁਸਕਰਾਹਟ ਨਾਲ ਪੇਸ਼”",
+                explore: "ਪ੍ਰੋਡਕਟਸ ਦੇਖੋ",
+                ourProducts: "ਸਾਡੇ ਖਾਸ ਪ੍ਰੋਡਕਟਸ",
+                buyNow: "ਹੁਣੇ ਆਰਡਰ ਕਰੋ",
+                meetCreators: "ਸਾਡੀ ਟੀਮ ਨੂੰ ਮਿਲੋ",
+                creatorsSub: "ਜਿਨ੍ਹਾਂ ਹੋਣਹਾਰ ਵਿਦਿਆਰਥੀਆਂ ਨੇ ਮਿਲ ਕੇ ਇਹ ਪ੍ਰੋਜੈਕਟ ਬਣਾਇਆ ਹੈ",
+                visitStore: "ਸਾਡੇ ਸਟੋਰ / ਸਕੂਲ ਆਓ",
+                openMap: "ਗੂਗਲ ਮੈਪਸ 'ਚ ਜਗ੍ਹਾ ਦੇਖੋ",
+                orderHeader: "ਆਪਣਾ ਆਰਡਰ ਦਿਓ",
+                yourName: "ਤੁਹਾਡਾ ਨਾਮ",
+                phone: "ਫੋਨ ਨੰਬਰ",
+                qty: "ਮਾਤਰਾ",
+                total: "ਕੁੱਲ ਰਕਮ",
+                note: "ਨੋਟ (ਮਰਜ਼ੀ ਅਨੁਸਾਰ)",
+                confirmOrder: "ਆਰਡਰ ਕਨਫਰਮ ਕਰੋ 🚀"
+            },
+            bho: {
+                adminLogin: "मालिक लॉगिन",
+                heroBadge: "बिजनेस ब्लास्टर स्टूडेंट एंटरप्राइज",
+                quote: "“लईकन द्वारा बनल • रचनात्मकता से भरल • मुस्कान के साथ सर्व कएल”",
+                explore: "सामान देखीं",
+                ourProducts: "हमनी के खास सामान",
+                buyNow: "अभी आर्डर करीं",
+                meetCreators: "टीम से मिलीं",
+                creatorsSub: "जेन होनहार लईकन इ प्रोजेक्ट के मिल के बनवले बाड़न",
+                visitStore: "हमनी के दुकान / स्कूल आईें",
+                openMap: "गूगल मैप प लोकेशन देखीं",
+                orderHeader: "आर्डर करीं",
+                yourName: "रउआ नाम",
+                phone: "फोन नंबर",
+                qty: "मात्रा",
+                total: "कुल रुपया",
+                note: "कुछ खास बात (इच्छा हो त)",
+                confirmOrder: "आर्डर पक्का करीं 🚀"
+            }
+        };
+
+        let currentLang = 'en';
+        let selectedProduct = null;
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            document.getElementById('txtAdminLogin').innerText = t.adminLogin;
+            document.getElementById('txtHeroBadge').innerText = t.heroBadge;
+            document.getElementById('txtQuote').innerText = t.quote;
+            document.getElementById('btnExplore').querySelector('span:last-child').innerText = t.explore;
+            document.getElementById('txtOurProducts').innerText = t.ourProducts;
+            document.getElementById('txtMeetCreators').innerText = t.meetCreators;
+            document.getElementById('txtCreatorsSub').innerText = t.creatorsSub;
+            document.getElementById('txtVisitStore').innerText = t.visitStore;
+            document.getElementById('txtOpenMap').innerText = t.openMap;
+            document.getElementById('txtOrderHeader').innerText = t.orderHeader;
+            document.getElementById('lblYourName').innerText = t.yourName;
+            document.getElementById('lblPhone').innerText = t.phone;
+            document.getElementById('lblQty').innerText = t.qty;
+            document.getElementById('lblTotal').innerText = t.total;
+            document.getElementById('lblNote').innerText = t.note;
+            document.getElementById('btnConfirmOrder').innerText = t.confirmOrder;
+
+            loadStoreData();
+        }
+
+        function loadStoreData() {
+            const t = translations[currentLang];
+            let products = JSON.parse(localStorage.getItem('twinkle_products') || '[]');
+            
+            // Default demo items matching video screenshot
+            if (products.length === 0) {
+                products = [
+                    { id: 1, name: "Handmade Candle", price: "20", desc: "Handmade with creativity & care", image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=600&q=80" },
+                    { id: 2, name: "Fresh Dosa", price: "30", desc: "Fresh • Tasty • Made by our team", image: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=600&q=80" },
+                    { id: 3, name: "Samosa", price: "20", desc: "Crispy and delicious snacks", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80" }
+                ];
+            }
+
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <!-- Image Container with Overlaid Price Badge -->
+                        <div class="relative w-full h-48 bg-slate-100">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">
+                            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-black text-emerald-700 shadow-md">
+                                ₹${p.price}
+                            </div>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="p-5">
+                            <h3 class="font-extrabold text-slate-900 text-base">${p.name}</h3>
+                            <p class="text-xs text-slate-500 font-medium mt-1">${p.desc || ''}</p>
+                        </div>
+                    </div>
+
+                    <!-- Order Button -->
+                    <div class="px-5 pb-5">
+                        <button onclick="openOrderModal(${p.id})" class="w-full btn-gradient text-white font-extrabold text-xs py-3 rounded-2xl shadow-md hover:opacity-95 transition flex items-center justify-center space-x-1">
+                            <span>🛒</span>
+                            <span>${t.buyNow}</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            const banner = localStorage.getItem('twinkle_creator_banner');
+            if (banner) {
+                document.getElementById('creatorPoster').src = banner;
+                document.getElementById('creatorPoster').classList.remove('hidden');
+                document.getElementById('noPosterMsg').classList.add('hidden');
+            }
+
+            const settings = JSON.parse(localStorage.getItem('twinkle_settings') || '{}');
+            if (settings.locName) {
+                document.getElementById('dispLocName').innerText = settings.locName;
+                document.getElementById('txtSchoolName').innerText = settings.locName;
+            }
+            if (settings.mapUrl) document.getElementById('dispMapBtn').href = settings.mapUrl;
+        }
+
+        function openOrderModal(productId) {
+            let products = JSON.parse(localStorage.getItem('twinkle_products') || '[]');
+            if (products.length === 0) {
+                products = [
+                    { id: 1, name: "Handmade Candle", price: "20" },
+                    { id: 2, name: "Fresh Dosa", price: "30" },
+                    { id: 3, name: "Samosa", price: "20" }
+                ];
+            }
+            selectedProduct = products.find(p => p.id === productId);
+
+            if (selectedProduct) {
+                document.getElementById('modalProdName').innerText = `${selectedProduct.name} (₹${selectedProduct.price})`;
+                document.getElementById('custQty').value = 1;
+                calcTotal();
+                document.getElementById('orderModal').classList.remove('hidden');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').classList.add('hidden');
+        }
+
+        function calcTotal() {
+            if (selectedProduct) {
+                const qty = parseInt(document.getElementById('custQty').value) || 1;
+                const total = qty * parseInt(selectedProduct.price);
+                document.getElementById('modalTotalPrice').innerText = `₹${total}`;
+            }
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const qty = document.getElementById('custQty').value;
+            const note = document.getElementById('custNote').value.trim();
+            const total = qty * parseInt(selectedProduct.price);
+
+            const newOrder = {
+                id: Date.now(),
+                product: selectedProduct.name,
+                price: selectedProduct.price,
+                qty: qty,
+                total: `₹${total}`,
+                name: name,
+                phone: phone,
+                note: note,
+                status: 'New Order'
+            };
+
+            let orders = JSON.parse(localStorage.getItem('twinkle_orders') || '[]');
+            orders.unshift(newOrder);
+            localStorage.setItem('twinkle_orders', JSON.stringify(orders));
+
+            alert("✅ Order Placed Successfully!");
+            closeModal();
+            e.target.reset();
+        }
+
+        window.onload = loadStoreData;
+    </script>
+</body>
+</html>
