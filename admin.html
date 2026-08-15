@@ -1,244 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twinkle Time - Admin Panel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .hero-gradient { background: linear-gradient(135deg, #6b21a8 0%, #a855f7 50%, #ec4899 100%); }
-        .btn-gradient { background: linear-gradient(90deg, #9333ea 0%, #db2777 100%); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twinkle Time - Admin Panel</title>
+  <style>
+    body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: #0d0d14; color: #fff; margin: 0; padding: 20px; }
+    .container { max-width: 500px; margin: 0 auto; }
+    .card { background: #181824; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #2a2a3c; }
+    h2 { color: #ff007f; margin-top: 0; text-align: center; }
+    h3 { color: #e1e1e1; margin-top: 0; }
+    input, button { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; box-sizing: border-box; font-size: 14px; }
+    button { background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; font-weight: bold; border: none; cursor: pointer; }
+    .hidden { display: none; }
+    .product-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; }
+    .product-item img { width: 45px; height: 45px; object-fit: cover; border-radius: 6px; }
+    .btn-delete { background: #e74c3c; width: auto; padding: 8px 14px; margin: 0; }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+<body>
 
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-8 text-center border border-slate-100">
-            <div class="w-16 h-16 hero-gradient text-white rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-md">
-                👑
-            </div>
-            <h2 class="text-2xl font-black text-slate-900">Owner Login</h2>
-            <p class="text-xs font-semibold text-slate-400 mt-1 mb-6">Enter Admin Security PIN</p>
-            
-            <input type="password" id="adminPin" placeholder="PIN दर्ज करें" class="w-full border border-slate-200 bg-slate-50 text-slate-800 rounded-xl p-3 text-center text-xl tracking-widest mb-4 outline-purple-500 font-black">
-            
-            <button onclick="checkPin()" class="w-full btn-gradient text-white font-extrabold py-3.5 rounded-xl shadow-md transition active:scale-95 text-xs">
-                Unlock Control Panel
-            </button>
-            
-            <a href="index.html" class="inline-block mt-5 text-xs font-bold text-slate-400 hover:text-purple-600">← Back to Main Website</a>
+<div class="container">
+  <!-- LOGIN SECTION -->
+  <div id="login-section" class="card">
+    <h2>👑 Owner Login</h2>
+    <p style="color: #aaa; text-align: center;">Enter Admin Security PIN</p>
+    <input type="password" id="pin-input" placeholder="PIN दर्ज करें">
+    <button onclick="login()">Unlock Control Panel</button>
+  </div>
+
+  <!-- MAIN ADMIN PANEL -->
+  <div id="admin-panel" class="hidden">
+    
+    <!-- ADD PRODUCT -->
+    <div class="card">
+      <h3>➕ Add Product</h3>
+      <input type="text" id="prod-name" placeholder="Product Name (e.g. Fresh Dosa)">
+      <input type="number" id="prod-price" placeholder="Price (₹)">
+      <input type="text" id="prod-desc" placeholder="Short Description">
+      <input type="text" id="prod-img" placeholder="Image Web URL (https://...)">
+      <button onclick="addProduct()">➕ Save Product</button>
+    </div>
+
+    <!-- MANAGE PRODUCTS -->
+    <div class="card">
+      <h3>🛍️ Manage Products</h3>
+      <div id="manage-products-list"></div>
+    </div>
+
+    <!-- CHANGE PIN -->
+    <div class="card">
+      <h3>🔑 Change Admin PIN</h3>
+      <input type="password" id="new-pin-input" placeholder="नया PIN दर्ज करें">
+      <button onclick="changeAdminPin()" style="background: linear-gradient(135deg, #8e44ad, #3498db);">💾 Save New PIN</button>
+    </div>
+
+    <button onclick="logout()" style="background: #444;">🔒 Logout</button>
+  </div>
+</div>
+
+<script>
+  const MASTER_PIN = "1234";
+
+  // Default Products
+  const defaultProducts = [
+    { id: 1, name: "Handmade Candle", price: 20, desc: "Handmade with creativity & care", image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500" },
+    { id: 2, name: "Fresh Dosa", price: 30, desc: "Fresh • Tasty • Made by our team", image: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500" },
+    { id: 3, name: "Samosa", price: 20, desc: "Crispy and delicious snacks", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500" }
+  ];
+
+  function getProducts() {
+    let products = localStorage.getItem('twinkle_products');
+    if (!products) {
+      localStorage.setItem('twinkle_products', JSON.stringify(defaultProducts));
+      return defaultProducts;
+    }
+    return JSON.parse(products);
+  }
+
+  function login() {
+    const pin = document.getElementById('pin-input').value.trim();
+    const customPin = localStorage.getItem('twinkle_custom_pin');
+    if (pin === MASTER_PIN || (customPin && pin === customPin)) {
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('admin-panel').classList.remove('hidden');
+      renderManageProducts();
+    } else {
+      alert("गलत PIN! कृपया सही PIN दर्ज करें।");
+    }
+  }
+
+  function logout() {
+    document.getElementById('admin-panel').classList.add('hidden');
+    document.getElementById('login-section').classList.remove('hidden');
+    document.getElementById('pin-input').value = '';
+  }
+
+  function addProduct() {
+    const name = document.getElementById('prod-name').value.trim();
+    const price = document.getElementById('prod-price').value.trim();
+    const desc = document.getElementById('prod-desc').value.trim();
+    const image = document.getElementById('prod-img').value.trim() || 'https://via.placeholder.com/150';
+
+    if (!name || !price) {
+      alert('कृपया प्रोडक्ट का नाम और कीमत भरें!');
+      return;
+    }
+
+    const products = getProducts();
+    products.push({ id: Date.now(), name, price, desc, image });
+    localStorage.setItem('twinkle_products', JSON.stringify(products));
+
+    alert('प्रोडक्ट सफलतापूर्वक जुड़ गया!');
+    document.getElementById('prod-name').value = '';
+    document.getElementById('prod-price').value = '';
+    document.getElementById('prod-desc').value = '';
+    document.getElementById('prod-img').value = '';
+    renderManageProducts();
+  }
+
+  function renderManageProducts() {
+    const container = document.getElementById('manage-products-list');
+    const products = getProducts();
+
+    if (products.length === 0) {
+      container.innerHTML = `<p style="color: #aaa; text-align: center;">कोई प्रोडक्ट नहीं है।</p>`;
+      return;
+    }
+
+    container.innerHTML = products.map((product, index) => `
+      <div class="product-item">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <img src="${product.image}" alt="${product.name}">
+          <div>
+            <div style="font-weight:bold; font-size:15px;">${product.name}</div>
+            <div style="color:#2ecc71; font-size:13px; font-weight:bold;">₹${product.price}</div>
+          </div>
         </div>
-    </div>
+        <button class="btn-delete" onclick="deleteProduct(${index})">🗑️ Delete</button>
+      </div>
+    `).join('');
+  }
 
-    <!-- MAIN OWNER PANEL -->
-    <div id="adminPanel" class="hidden min-h-screen flex flex-col">
-        <!-- HEADER -->
-        <header class="bg-white border-b border-slate-100 p-4 px-6 flex justify-between items-center shadow-sm">
-            <div class="flex items-center space-x-2">
-                <span class="text-xl">👑</span>
-                <h1 class="font-extrabold text-sm sm:text-base text-purple-900">Twinkle Time Owner Panel</h1>
-            </div>
-            <a href="index.html" class="bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold px-4 py-2 rounded-full border border-purple-200 transition">
-                🌐 View Main Website
-            </a>
-        </header>
+  function deleteProduct(index) {
+    let products = getProducts();
+    if (confirm(`क्या आप "${products[index].name}" को डिलीट करना चाहते हैं?`)) {
+      products.splice(index, 1);
+      localStorage.setItem('twinkle_products', JSON.stringify(products));
+      renderManageProducts();
+    }
+  }
 
-        <main class="max-w-4xl mx-auto w-full p-4 sm:p-6 space-y-6 flex-grow">
-            
-            <!-- SECTION 1: ADD PRODUCT -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                <h2 class="font-black text-base text-slate-900 mb-1">➕ Add Product</h2>
-                <p class="text-xs text-slate-400 mb-4">Upload image or paste direct URL link</p>
-                
-                <form onsubmit="handleAddProduct(event)" class="space-y-3">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="text" id="pName" placeholder="Product Name (e.g. Fresh Dosa)" required class="border border-slate-200 bg-slate-50 rounded-xl p-3 text-xs outline-purple-500 font-semibold">
-                        <input type="number" id="pPrice" placeholder="Price (₹)" required class="border border-slate-200 bg-slate-50 rounded-xl p-3 text-xs outline-purple-500 font-semibold">
-                    </div>
-                    <input type="text" id="pDesc" placeholder="Short Description (e.g. Fresh • Tasty • Made by our team)" class="w-full border border-slate-200 bg-slate-50 rounded-xl p-3 text-xs outline-purple-500 font-semibold">
-                    
-                    <div class="border border-dashed border-purple-200 rounded-2xl p-4 bg-purple-50/50">
-                        <label class="block text-xs font-bold text-slate-600 mb-1">📸 Upload Photo File:</label>
-                        <input type="file" id="pFile" accept="image/*" onchange="convertAndCompressImage('pFile', 'pProductImg', 500)" class="w-full text-xs text-slate-500">
-                        <p class="text-[11px] text-slate-400 mt-2">OR Paste Direct Image Web URL:</p>
-                        <input type="text" id="pImgUrl" placeholder="https://example.com/photo.jpg" class="w-full border border-slate-200 bg-white rounded-xl p-2.5 text-xs mt-1">
-                    </div>
-
-                    <button type="submit" class="btn-gradient text-white font-extrabold px-6 py-3 rounded-xl text-xs shadow-md transition">
-                        ➕ Save Product
-                    </button>
-                </form>
-            </div>
-
-            <!-- SECTION 2: EDIT / DELETE PRODUCTS -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                <h2 class="font-black text-base text-slate-900 mb-4">🛍️ Manage Products</h2>
-                <div id="productList" class="space-y-3"></div>
-            </div>
-
-            <!-- SECTION 3: CREATOR BANNER -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                <h2 class="font-black text-base text-slate-900 mb-1">🖼️ Meet Our Creators (Team Poster)</h2>
-                <form onsubmit="handleSaveBanner(event)" class="space-y-3 mt-4">
-                    <input type="file" id="bFile" accept="image/*" onchange="convertAndCompressImage('bFile', 'pBannerImg', 1000)" class="w-full text-xs text-slate-500">
-                    <div id="bannerPreview" class="mt-2 hidden">
-                        <img id="prevImg" src="" class="w-full h-48 object-cover rounded-2xl border border-purple-100">
-                    </div>
-                    <button type="submit" class="bg-emerald-600 text-white font-extrabold px-6 py-3 rounded-xl text-xs shadow-md">
-                        💾 Save Team Photo
-                    </button>
-                </form>
-            </div>
-
-            <!-- SECTION 4: LOCATION SETTINGS -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                <h2 class="font-black text-base text-slate-900 mb-4">📍 Location & Map Settings</h2>
-                <form onsubmit="handleSaveSettings(event)" class="space-y-3">
-                    <input type="text" id="setLocName" required placeholder="School / Store Name" class="w-full border border-slate-200 bg-slate-50 rounded-xl p-3 text-xs font-semibold">
-                    <input type="text" id="setMapUrl" required placeholder="Google Maps URL" class="w-full border border-slate-200 bg-slate-50 rounded-xl p-3 text-xs font-semibold">
-                    <button type="submit" class="btn-gradient text-white font-bold px-6 py-2.5 rounded-xl text-xs">
-                        💾 Save Location Details
-                    </button>
-                </form>
-            </div>
-
-            <!-- SECTION 5: RECEIVED ORDERS -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-black text-base text-slate-900">📦 Received Orders</h2>
-                    <button onclick="clearOrders()" class="text-xs text-rose-500 font-bold hover:underline">Clear Orders</button>
-                </div>
-                <div id="orderList" class="space-y-3"></div>
-            </div>
-
-        </main>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        let tempImages = { pProductImg: "", pBannerImg: "" };
-
-        function checkPin() {
-            const inputPin = document.getElementById('adminPin').value.trim();
-            const currentPin = localStorage.getItem('twinkle_owner_pin') || '1234';
-
-            if (inputPin === currentPin || inputPin === '1234') {
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('adminPanel').classList.remove('hidden');
-                loadAllData();
-            } else {
-                alert("Incorrect PIN!");
-            }
-        }
-
-        function convertAndCompressImage(inputId, targetKey, maxW = 500) {
-            const file = document.getElementById(inputId).files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const scale = maxW / img.width;
-                        canvas.width = maxW;
-                        canvas.height = img.height * scale;
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        tempImages[targetKey] = canvas.toDataURL('image/jpeg', 0.80);
-
-                        if(targetKey === 'pBannerImg') {
-                            document.getElementById('prevImg').src = tempImages.pBannerImg;
-                            document.getElementById('bannerPreview').classList.remove('hidden');
-                        }
-                    };
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function handleAddProduct(e) {
-            e.preventDefault();
-            const name = document.getElementById('pName').value;
-            const price = document.getElementById('pPrice').value;
-            const desc = document.getElementById('pDesc').value;
-            const url = document.getElementById('pImgUrl').value;
-
-            const finalImg = tempImages.pProductImg || url || "https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=600&q=80";
-
-            let products = JSON.parse(localStorage.getItem('twinkle_products') || '[]');
-            products.push({ id: Date.now(), name, price, desc, image: finalImg });
-            localStorage.setItem('twinkle_products', JSON.stringify(products));
-
-            alert("✅ Product Added!");
-            tempImages.pProductImg = "";
-            e.target.reset();
-            loadAllData();
-        }
-
-        function handleSaveBanner(e) {
-            e.preventDefault();
-            if(tempImages.pBannerImg) {
-                localStorage.setItem('twinkle_creator_banner', tempImages.pBannerImg);
-                alert("🌟 Team Banner Saved!");
-            }
-        }
-
-        function deleteProduct(id) {
-            if(confirm("Delete this product?")) {
-                let products = JSON.parse(localStorage.getItem('twinkle_products') || '[]');
-                products = products.filter(p => p.id !== id);
-                localStorage.setItem('twinkle_products', JSON.stringify(products));
-                loadAllData();
-            }
-        }
-
-        function handleSaveSettings(e) {
-            e.preventDefault();
-            const locName = document.getElementById('setLocName').value;
-            const mapUrl = document.getElementById('setMapUrl').value;
-            localStorage.setItem('twinkle_settings', JSON.stringify({ locName, mapUrl }));
-            alert("✅ Settings Saved!");
-        }
-
-        function loadAllData() {
-            let products = JSON.parse(localStorage.getItem('twinkle_products') || '[]');
-            const pContainer = document.getElementById('productList');
-            pContainer.innerHTML = products.map(p => `
-                <div class="flex items-center justify-between border border-slate-100 p-3 rounded-2xl bg-slate-50">
-                    <div class="flex items-center space-x-3">
-                        <img src="${p.image}" class="w-12 h-12 rounded-xl object-cover">
-                        <div>
-                            <h4 class="font-extrabold text-slate-800 text-xs">${p.name}</h4>
-                            <span class="text-xs text-emerald-600 font-black">₹${p.price}</span>
-                        </div>
-                    </div>
-                    <button onclick="deleteProduct(${p.id})" class="text-xs bg-rose-50 text-rose-600 px-3 py-1.5 rounded-xl font-bold hover:bg-rose-100">🗑️ Delete</button>
-                </div>
-            `).join('');
-
-            let orders = JSON.parse(localStorage.getItem('twinkle_orders') || '[]');
-            const oContainer = document.getElementById('orderList');
-            oContainer.innerHTML = orders.map(o => `
-                <div class="border border-purple-100 p-3 rounded-2xl bg-purple-50/50 flex justify-between items-center text-xs">
-                    <div>
-                        <p class="font-black text-slate-800">${o.name} (${o.phone})</p>
-                        <p class="text-slate-500">${o.product} - ${o.qty} Pcs | <strong class="text-purple-700">${o.total}</strong></p>
-                    </div>
-                    <span class="bg-purple-200 text-purple-900 font-bold px-2 py-1 rounded-lg text-[10px]">${o.status}</span>
-                </div>
-            `).join('');
-        }
-
-        function clearOrders() {
-            if(confirm("Clear all orders?")) {
-                localStorage.removeItem('twinkle_orders');
-                loadAllData();
-            }
-        }
-    </script>
+  function changeAdminPin() {
+    const newPin = document.getElementById('new-pin-input').value.trim();
+    if (!newPin) {
+      alert("कृपया नया PIN दर्ज करें!");
+      return;
+    }
+    localStorage.setItem('twinkle_custom_pin', newPin);
+    alert("🎉 PIN सफलतापूर्वक बदल गया है! अब '1234' और आपका नया PIN दोनों काम करेंगे।");
+    document.getElementById('new-pin-input').value = '';
+  }
+</script>
 </body>
 </html>
