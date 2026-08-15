@@ -15,9 +15,7 @@
     .nav-btns { display: flex; gap: 8px; align-items: center; }
     
     /* Language Select Styling */
-    .lang-select-wrapper { position: relative; }
     .lang-select { background: #181826; border: 1px solid #2e2e48; color: #a5b4fc; padding: 6px 10px; border-radius: 20px; font-size: 12px; outline: none; cursor: pointer; }
-
     .crown-btn { background: #181826; border: 1px solid #2e2e48; color: #f59e0b; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
 
     /* Purple Hero Banner */
@@ -42,7 +40,33 @@
     .product-details { padding: 18px; }
     .product-title { font-size: 19px; font-weight: 800; margin-bottom: 4px; color: #ffffff; }
     .product-desc { font-size: 13px; color: #94a3b8; margin-bottom: 16px; font-weight: 400; }
-    .order-btn { width: 100%; padding: 13px; border-radius: 30px; border: none; background: linear-gradient(90deg, #9333ea 0%, #d946ef 50%, #ec4899 100%); color: #ffffff; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(217, 70, 239, 0.3); text-decoration: none; }
+    .order-btn { width: 100%; padding: 13px; border-radius: 30px; border: none; background: linear-gradient(90deg, #9333ea 0%, #d946ef 50%, #ec4899 100%); color: #ffffff; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(217, 70, 239, 0.3); }
+
+    /* Modal / Popup Overlay */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 16px; }
+    .modal-card { background: #141420; border: 1px solid #3b2854; border-radius: 24px; padding: 22px; width: 100%; max-width: 400px; box-shadow: 0 12px 32px rgba(0,0,0,0.8); position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-title { font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 14px; text-align: center; border-bottom: 1px solid #232336; padding-bottom: 10px; }
+    
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 12px; color: #a5b4fc; margin-bottom: 4px; font-weight: 600; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px 12px; background: #1a1a28; border: 1px solid #2e2e48; border-radius: 12px; color: white; font-size: 13px; outline: none; }
+    .form-group input:focus, .form-group textarea:focus { border-color: #d946ef; }
+    
+    .qty-box { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+    .qty-btn { width: 34px; height: 34px; background: #2e2e48; border: none; color: white; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
+    .qty-val { font-size: 15px; font-weight: bold; width: 30px; text-align: center; }
+
+    .price-summary { background: #1e1233; border: 1px dashed #7c3aed; padding: 10px; border-radius: 12px; margin: 14px 0; text-align: center; font-size: 14px; font-weight: 700; color: #10b981; }
+
+    .btn-group { display: flex; gap: 10px; margin-top: 16px; }
+    .btn-submit { flex: 1; padding: 12px; background: linear-gradient(90deg, #10b981, #059669); border: none; border-radius: 20px; color: white; font-weight: bold; font-size: 14px; cursor: pointer; }
+    .btn-cancel { background: #2e2e48; border: none; padding: 12px 18px; border-radius: 20px; color: #cbd5e1; font-weight: bold; font-size: 13px; cursor: pointer; }
+
+    /* Success Order Modal (Green Tick) */
+    .success-box { text-align: center; padding: 10px 0; }
+    .green-tick-circle { width: 75px; height: 75px; background: rgba(16, 185, 129, 0.15); border: 3px solid #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px auto; font-size: 40px; color: #10b981; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); }
+    .receipt-box { background: #1a1a28; border: 1px solid #2e2e48; border-radius: 14px; padding: 14px; text-align: left; margin: 16px 0; font-size: 12px; line-height: 1.6; color: #cbd5e1; }
+    .receipt-box b { color: #ffffff; }
 
     /* Behind The Project Box */
     .behind-box { background: #141420; border-radius: 24px; border: 1px solid #232336; padding: 24px 18px; text-align: center; margin-top: 30px; }
@@ -81,25 +105,19 @@
   <div class="navbar">
     <div class="brand">✨ TWINKLE TIME</div>
     <div class="nav-btns">
-      <div class="lang-select-wrapper">
-        <select class="lang-select" id="language-switcher" onchange="translatePage(this.value)">
-          <option value="en">🌐 English</option>
-          <option value="hi" selected>🌐 Hindi (हिंदी)</option>
-          <option value="pa">🌐 Punjabi (ਪੰਜਾਬੀ)</option>
-          <option value="bho">🌐 Bhojpuri (भोजपुरी)</option>
-          <option value="mr">🌐 Marathi (मराठी)</option>
-          <option value="gu">🌐 Gujarati (ગુજરાતી)</option>
-          <option value="bn">🌐 Bengali (বাংলা)</option>
-          <option value="ta">🌐 Tamil (தமிழ்)</option>
-          <option value="te">🌐 Telugu (తెలుగు)</option>
-          <option value="kn">🌐 Kannada (ಕನ್ನಡ)</option>
-          <option value="ur">🌐 Urdu (اردو)</option>
-          <option value="ml">🌐 Malayalam (മലയാളം)</option>
-          <option value="or">🌐 Odia (ଓଡ଼ିଆ)</option>
-          <option value="as">🌐 Assamese (অসমীয়া)</option>
-          <option value="ne">🌐 Nepali (नेपाली)</option>
-        </select>
-      </div>
+      <select class="lang-select" id="language-switcher" onchange="translatePage(this.value)">
+        <option value="en">🌐 English</option>
+        <option value="hi" selected>🌐 Hindi (हिंदी)</option>
+        <option value="pa">🌐 Punjabi (ਪੰਜਾਬੀ)</option>
+        <option value="bho">🌐 Bhojpuri (भोजपुरी)</option>
+        <option value="mr">🌐 Marathi (मराठी)</option>
+        <option value="gu">🌐 Gujarati (ગુજરાતી)</option>
+        <option value="bn">🌐 Bengali (বাংলা)</option>
+        <option value="ta">🌐 Tamil (தமிழ்)</option>
+        <option value="te">🌐 Telugu (తెలుగు)</option>
+        <option value="kn">🌐 Kannada (ಕನ್ನಡ)</option>
+        <option value="ur">🌐 Urdu (اردو)</option>
+      </select>
       <a href="admin.html" class="crown-btn" title="Admin Panel">👑</a>
     </div>
   </div>
@@ -162,7 +180,72 @@
 
 </div>
 
+<!-- 📝 ORDER FORM MODAL -->
+<div class="modal-overlay" id="order-modal">
+  <div class="modal-card">
+    <div class="modal-title">🛍️ ऑर्डर विवरण दर्ज करें</div>
+    <form id="checkout-form" onsubmit="submitOrder(event)">
+      <div style="font-size: 14px; font-weight: bold; color: #f472b6; margin-bottom: 12px; text-align: center;" id="modal-product-name">
+        Product Name
+      </div>
+
+      <div class="form-group">
+        <label>आपका नाम (Full Name) *</label>
+        <input type="text" id="cust-name" placeholder="अपना नाम दर्ज करें" required>
+      </div>
+
+      <div class="form-group">
+        <label>मोबाइल नंबर (Phone Number) *</label>
+        <input type="tel" id="cust-phone" placeholder="10 अंकों का मोबाइल नंबर" pattern="[0-9]{10}" required>
+      </div>
+
+      <div class="form-group">
+        <label>पता / रोल नं / क्लास (Address/Detail) *</label>
+        <textarea id="cust-address" rows="2" placeholder="अपना क्लास, रोल नंबर या डिलीवरी पता दर्ज करें" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>मात्रा (Quantity)</label>
+        <div class="qty-box">
+          <button type="button" class="qty-btn" onclick="changeQty(-1)">-</button>
+          <span class="qty-val" id="qty-display">1</span>
+          <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+
+      <div class="price-summary" id="modal-price-summary">
+        कुल भुगतान: ₹0
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn-cancel" onclick="closeOrderModal()">रद्द करें</button>
+        <button type="submit" class="btn-submit">ऑर्डर कन्फर्म करें 🛍️</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ✅ ORDER CONFIRMED SUCCESS MODAL -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal-card">
+    <div class="success-box">
+      <div class="green-tick-circle">✓</div>
+      <h2 style="font-size: 20px; font-weight: 800; color: #10b981;">Order Confirmed!</h2>
+      <p style="font-size: 13px; color: #94a3b8; margin-top: 4px;">आपका ऑर्डर सफलतापूर्वक दर्ज हो गया है</p>
+
+      <div class="receipt-box" id="receipt-details">
+        <!-- JS fills receipt info -->
+      </div>
+
+      <button class="order-btn" style="background: #10b981; margin-top: 10px;" onclick="closeSuccessModal()">ठीक है (OK)</button>
+    </div>
+  </div>
+</div>
+
 <script>
+  let currentProduct = null;
+  let currentQty = 1;
+
   function translatePage(langCode) {
     var selectObj = document.querySelector('.goog-te-combo');
     if (selectObj) {
@@ -192,7 +275,6 @@
     } else {
       container.innerHTML = prods.map(p => {
         let subText = p.desc || "Fresh • Tasty • Made by our team";
-        const orderMsg = encodeURIComponent(`नमस्ते! मुझे Twinkle Time से ${p.n} (₹${p.p}) ऑर्डर करना है।`);
         return `
           <div class="product-card">
             ${p.p ? `<div class="price-badge">₹${p.p}</div>` : ''}
@@ -200,23 +282,21 @@
             <div class="product-details">
               <h3 class="product-title">${p.n}</h3>
               <p class="product-desc">${subText}</p>
-              <a href="https://wa.me/?text=${orderMsg}" target="_blank" class="order-btn">🛒 Order Now</a>
+              <button class="order-btn" onclick="openOrderModal(${p.id})">🛒 Order Now</button>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    // Team Photo Sync
+    // Load store info
     const teamImg = localStorage.getItem('twinkle_team_photo');
     if (teamImg) {
-      const imgEl = document.getElementById('team-photo-img');
-      imgEl.src = teamImg;
-      imgEl.style.display = 'block';
+      document.getElementById('team-photo-img').src = teamImg;
+      document.getElementById('team-photo-img').style.display = 'block';
       document.getElementById('team-placeholder-box').style.display = 'none';
     }
 
-    // Store Info Sync
     const schoolName = localStorage.getItem('twinkle_school_name');
     const mapsUrl = localStorage.getItem('twinkle_maps_url');
     const ownerEmail = localStorage.getItem('twinkle_email');
@@ -230,6 +310,90 @@
       document.getElementById('footer-email-text').innerText = ownerEmail;
       document.getElementById('footer-email-link').href = 'mailto:' + ownerEmail;
     }
+  }
+
+  function openOrderModal(productId) {
+    const prods = JSON.parse(localStorage.getItem('twinkle_prods') || "[]");
+    currentProduct = prods.find(p => p.id === productId);
+    if (!currentProduct) return;
+
+    currentQty = 1;
+    document.getElementById('qty-display').innerText = currentQty;
+    document.getElementById('modal-product-name').innerText = currentProduct.n + " (₹" + currentProduct.p + " / नग)";
+    updateTotalSummary();
+
+    document.getElementById('order-modal').style.display = 'flex';
+  }
+
+  function closeOrderModal() {
+    document.getElementById('order-modal').style.display = 'none';
+    document.getElementById('checkout-form').reset();
+  }
+
+  function changeQty(amount) {
+    if (currentQty + amount >= 1) {
+      currentQty += amount;
+      document.getElementById('qty-display').innerText = currentQty;
+      updateTotalSummary();
+    }
+  }
+
+  function updateTotalSummary() {
+    const price = parseFloat(currentProduct.p) || 0;
+    const total = price * currentQty;
+    document.getElementById('modal-price-summary').innerText = `कुल भुगतान: ₹${total} (${currentQty} x ₹${price})`;
+  }
+
+  function submitOrder(e) {
+    e.preventDefault();
+    const name = document.getElementById('cust-name').value.trim();
+    const phone = document.getElementById('cust-phone').value.trim();
+    const address = document.getElementById('cust-address').value.trim();
+
+    if (!name || !phone || !address) {
+      alert("कृपया सभी विवरण भरें!");
+      return;
+    }
+
+    const price = parseFloat(currentProduct.p) || 0;
+    const totalPrice = price * currentQty;
+    const orderId = "ORD" + Math.floor(1000 + Math.random() * 9000);
+    const orderDate = new Date().toLocaleString('hi-IN');
+
+    const newOrder = {
+      id: orderId,
+      productName: currentProduct.n,
+      price: currentProduct.p,
+      qty: currentQty,
+      totalPrice: totalPrice,
+      customerName: name,
+      customerPhone: phone,
+      customerAddress: address,
+      date: orderDate,
+      status: 'Pending ⏳'
+    };
+
+    // Save order in localStorage
+    const existingOrders = JSON.parse(localStorage.getItem('twinkle_orders') || "[]");
+    existingOrders.unshift(newOrder);
+    localStorage.setItem('twinkle_orders', JSON.stringify(existingOrders));
+
+    // Show Success Modal
+    closeOrderModal();
+    document.getElementById('receipt-details').innerHTML = `
+      <b>ऑर्डर आईडी:</b> #${orderId}<br>
+      <b>तारीख:</b> ${orderDate}<br>
+      <b>आइटम:</b> ${currentProduct.n} (${currentQty} नग)<br>
+      <b>कुल कीमत:</b> <span style="color:#10b981; font-weight:bold;">₹${totalPrice}</span><br><br>
+      <b>ग्राहक का नाम:</b> ${name}<br>
+      <b>मोबाइल नंबर:</b> ${phone}<br>
+      <b>पता/विवरण:</b> ${address}
+    `;
+    document.getElementById('success-modal').style.display = 'flex';
+  }
+
+  function closeSuccessModal() {
+    document.getElementById('success-modal').style.display = 'none';
   }
 
   window.onload = renderWebsite;
