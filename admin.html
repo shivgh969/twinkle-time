@@ -10,10 +10,11 @@
     .container { max-width: 500px; margin: 0 auto; }
     .card { background: #181824; padding: 20px; border-radius: 14px; margin-bottom: 20px; border: 1px solid #2a2a3a; box-shadow: 0 8px 16px rgba(0,0,0,0.4); }
     
-    /* Owner Header Profile (Admin Only) */
-    .admin-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px; }
-    .owner-circle-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #e91e63; background: #222; }
-    .admin-title { margin: 0; font-size: 20px; color: #ff007f; }
+    /* HEADER WITH OWNER PHOTO & NAME */
+    .admin-header { display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 10px; }
+    .owner-circle-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #e91e63; background: #222; flex-shrink: 0; }
+    .admin-title { margin: 0; font-size: 20px; color: #ff007f; font-weight: bold; }
+    .admin-subtitle { font-size: 12px; color: #aaa; margin-top: 2px; display: block; }
 
     h2, h3 { color: #ff007f; margin-top: 0; margin-bottom: 12px; font-weight: 700; }
     label { font-size: 13px; color: #bbb; margin-top: 10px; display: block; font-weight: 600; }
@@ -23,7 +24,6 @@
     }
     input:focus { border-color: #e91e63; }
 
-    /* Custom File Input Styling */
     .file-input-wrapper { margin: 6px 0 12px 0; }
     input[type="file"] { display: none; }
     .file-btn { display: block; text-align: center; background: #2a2a3d; border: 1px dashed #e91e63; color: #ff85c0; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; }
@@ -37,7 +37,10 @@
     .hidden { display: none; }
     .product-item { display: flex; justify-content: space-between; align-items: center; background: #222230; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; }
     .prod-img-preview { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; margin-right: 10px; }
-    .del-btn { width: auto; padding: 6px 12px; background: #e74c3c; border: none; color: #fff; border-radius: 6px; font-size: 12px; cursor: pointer; }
+    
+    .btn-group { display: flex; gap: 6px; }
+    .edit-btn { width: auto; padding: 6px 10px; background: #f39c12; border: none; color: #fff; border-radius: 6px; font-size: 12px; cursor: pointer; }
+    .del-btn { width: auto; padding: 6px 10px; background: #e74c3c; border: none; color: #fff; border-radius: 6px; font-size: 12px; cursor: pointer; }
     
     .img-preview-box { width: 100%; height: 100px; border-radius: 8px; object-fit: cover; margin-top: 5px; display: none; border: 1px solid #444; }
   </style>
@@ -56,21 +59,20 @@
   <!-- ADMIN PANEL -->
   <div id="admin-sec" class="hidden">
     
-    <!-- ADMIN TOP HEADER WITH OWNER CIRCLE PHOTO -->
+    <!-- HEADER WITH OWNER CIRCLE PHOTO & NAME -->
     <div class="card">
       <div class="admin-header">
-        <div>
-          <h2 class="admin-title">Admin Dashboard</h2>
-          <span style="font-size: 11px; color: #888;">Twinkle Time Control</span>
-        </div>
-        <!-- Owner Circle Photo (Only visible in Admin) -->
         <img id="admin-owner-circle" class="owner-circle-img" src="https://via.placeholder.com/150" alt="Owner Avatar">
+        <div>
+          <h2 class="admin-title" id="display-owner-name">Owner Name</h2>
+          <span class="admin-subtitle">Twinkle Time Control Panel</span>
+        </div>
       </div>
     </div>
 
     <!-- MANAGE PRODUCTS -->
     <div class="card">
-      <h3>➕ Manage Products</h3>
+      <h3 id="form-title">➕ Manage Products</h3>
       <label>Product Name</label>
       <input type="text" id="p-name" placeholder="e.g. Handmade Card">
       
@@ -79,7 +81,7 @@
       
       <label>Product Image</label>
       <div class="file-input-wrapper">
-        <label for="p-file" class="file-btn">📁 Choose from Gallery (Auto-Crop/Fit)</label>
+        <label for="p-file" class="file-btn">📁 Choose from Gallery (Auto-Fit)</label>
         <input type="file" id="p-file" accept="image/*" onchange="processFile(this, 'p-img-data', 'p-preview')">
       </div>
       <div class="or-divider">── OR USE IMAGE URL ──</div>
@@ -88,7 +90,8 @@
       <input type="hidden" id="p-img-data">
       <img id="p-preview" class="img-preview-box" alt="Product Preview">
 
-      <button class="primary-btn" onclick="addProd()">Add Product</button>
+      <button class="primary-btn" id="save-prod-btn" onclick="saveProd()">Add Product</button>
+      <button class="primary-btn" id="cancel-edit-btn" onclick="cancelEdit()" style="background:#555; display:none; margin-top:5px;">Cancel Editing</button>
 
       <div id="p-list" style="margin-top: 15px;"></div>
     </div>
@@ -97,8 +100,10 @@
     <div class="card">
       <h3>🖼️ Profile & Location Settings</h3>
       
-      <!-- Owner Photo (Admin Header) -->
-      <label>1. Owner Photo (For Admin Top Circle Only)</label>
+      <label>1. Owner Name (For Admin Header)</label>
+      <input type="text" id="o-name" placeholder="Enter Owner Name (e.g. Shivam)">
+
+      <label>2. Owner Photo (For Admin Top Circle Only)</label>
       <div class="file-input-wrapper">
         <label for="o-file" class="file-btn">📷 Choose Owner Photo from Gallery</label>
         <input type="file" id="o-file" accept="image/*" onchange="processFile(this, 'o-photo-data', 'o-preview')">
@@ -109,8 +114,7 @@
 
       <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
 
-      <!-- Team Photo (Website) -->
-      <label>2. Team Photo (Visible on Website)</label>
+      <label>3. Team Photo (Visible on Website)</label>
       <div class="file-input-wrapper">
         <label for="t-file" class="file-btn">👥 Choose Team Photo from Gallery</label>
         <input type="file" id="t-file" accept="image/*" onchange="processFile(this, 't-photo-data', 't-preview')">
@@ -121,17 +125,16 @@
 
       <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
 
-      <!-- Location -->
-      <label>3. Store / School Name</label>
+      <label>4. Store / School Name</label>
       <input type="text" id="s-name" placeholder="Enter Name">
       
-      <label>4. Google Maps Location URL</label>
+      <label>5. Google Maps Location URL</label>
       <input type="text" id="m-url" placeholder="Paste Google Maps Link">
       
       <button class="primary-btn" onclick="saveAllDetails()">Save Profile & Location</button>
     </div>
 
-    <!-- CHANGE PIN SECURITY -->
+    <!-- SECURITY PIN -->
     <div class="card">
       <h3>🔑 Security</h3>
       <label>New Security PIN</label>
@@ -145,7 +148,15 @@
 </div>
 
 <script>
-  // LOGIN CHECK
+  let editingIndex = null;
+
+  // DEFAULT PRODUCTS DATA (Samosa, Dosa, Candle)
+  const defaultProducts = [
+    { n: "Handmade Candle", p: "20", i: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500" },
+    { n: "Fresh Dosa", p: "30", i: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500" },
+    { n: "Samosa", p: "20", i: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500" }
+  ];
+
   function checkLogin() {
     let pinInput = document.getElementById('pin').value;
     let storedPin = localStorage.getItem('my_pin');
@@ -153,13 +164,20 @@
     if (pinInput === "1234" || (storedPin && pinInput === storedPin)) {
       document.getElementById('login-sec').classList.add('hidden');
       document.getElementById('admin-sec').classList.remove('hidden');
+      initDefaultProducts();
       loadSavedData();
     } else {
       alert("गलत PIN! कृपया सही PIN दर्ज करें।");
     }
   }
 
-  // AUTOMATIC IMAGE COMPRESSOR & FIT FUNCTION
+  function initDefaultProducts() {
+    let existingProds = localStorage.getItem('prods');
+    if (!existingProds || JSON.parse(existingProds).length === 0) {
+      localStorage.setItem('prods', JSON.stringify(defaultProducts));
+    }
+  }
+
   function processFile(fileInput, targetHiddenId, previewImgId) {
     const file = fileInput.files[0];
     if (!file) return;
@@ -168,9 +186,8 @@
     reader.onload = function(e) {
       const img = new Image();
       img.onload = function() {
-        // Automatic resizing to fix MB issues & auto-fit
         const canvas = document.createElement('canvas');
-        const maxDimension = 600; // Optimal for mobile local storage
+        const maxDimension = 600;
         let width = img.width;
         let height = img.height;
 
@@ -191,13 +208,9 @@
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Compress image to JPEG (Quality 0.7)
         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-
-        // Store compressed image in hidden field
         document.getElementById(targetHiddenId).value = compressedBase64;
 
-        // Display preview
         const previewEl = document.getElementById(previewImgId);
         if (previewEl) {
           previewEl.src = compressedBase64;
@@ -209,25 +222,26 @@
     reader.readAsDataURL(file);
   }
 
-  // LOAD SAVED DATA
   function loadSavedData() {
-    // Owner Circle Photo (Admin Top)
+    // Owner Name
+    const savedOwnerName = localStorage.getItem('o_name') || 'Owner Name';
+    document.getElementById('display-owner-name').innerText = savedOwnerName;
+    document.getElementById('o-name').value = localStorage.getItem('o_name') || '';
+
+    // Owner Photo
     const savedOwnerImg = localStorage.getItem('o_photo') || 'https://via.placeholder.com/150';
     document.getElementById('admin-owner-circle').src = savedOwnerImg;
     document.getElementById('o-photo-data').value = localStorage.getItem('o_photo') || '';
     
-    // Team Photo
+    // Team Photo & Store Info
     document.getElementById('t-photo-data').value = localStorage.getItem('t_photo') || '';
-    
-    // Store Name & Map
     document.getElementById('s-name').value = localStorage.getItem('s_name') || '';
     document.getElementById('m-url').value = localStorage.getItem('m_url') || '';
     
     renderProds();
   }
 
-  // PRODUCT FUNCTIONS
-  function addProd() {
+  function saveProd() {
     let name = document.getElementById('p-name').value.trim();
     let price = document.getElementById('p-price').value.trim();
     let imgData = document.getElementById('p-img-data').value.trim();
@@ -238,23 +252,70 @@
     }
 
     let prods = JSON.parse(localStorage.getItem('prods') || "[]");
-    prods.push({ n: name, p: price, i: imgData || 'https://via.placeholder.com/150' });
-    
-    try {
-      localStorage.setItem('prods', JSON.stringify(prods));
-      alert("प्रोडक्ट सफलतापूर्वक जुड़ गया!");
-    } catch(e) {
-      alert("मेमोरी फुल हो गई है, कृपया किसी पुराने प्रोडक्ट को डिलीट करें!");
+
+    if (editingIndex !== null) {
+      prods[editingIndex] = {
+        n: name,
+        p: price,
+        i: imgData || prods[editingIndex].i
+      };
+      alert("प्रोडक्ट अपडेट हो गया!");
+      cancelEdit();
+    } else {
+      prods.push({ n: name, p: price, i: imgData || 'https://via.placeholder.com/150' });
+      alert("नया प्रोडक्ट जुड़ गया!");
     }
 
-    // Reset Input Fields
+    try {
+      localStorage.setItem('prods', JSON.stringify(prods));
+    } catch(e) {
+      alert("मेमोरी फुल हो गई है! कृपया किसी गैर-ज़रूरी प्रोडक्ट को डिलीट करें।");
+    }
+
+    resetProdForm();
+    renderProds();
+  }
+
+  function editProd(index) {
+    let prods = JSON.parse(localStorage.getItem('prods') || "[]");
+    let item = prods[index];
+
+    editingIndex = index;
+    document.getElementById('form-title').innerText = "✏️ Edit Product";
+    document.getElementById('p-name').value = item.n;
+    document.getElementById('p-price').value = item.p || '';
+    document.getElementById('p-img-data').value = item.i;
+    
+    if (item.i.startsWith('http')) {
+      document.getElementById('p-img-url').value = item.i;
+    } else {
+      document.getElementById('p-img-url').value = '';
+    }
+
+    const preview = document.getElementById('p-preview');
+    preview.src = item.i;
+    preview.style.display = 'block';
+
+    document.getElementById('save-prod-btn').innerText = "Update Changes";
+    document.getElementById('cancel-edit-btn').style.display = 'block';
+    
+    window.scrollTo({ top: 100, behavior: 'smooth' });
+  }
+
+  function cancelEdit() {
+    editingIndex = null;
+    document.getElementById('form-title').innerText = "➕ Manage Products";
+    document.getElementById('save-prod-btn').innerText = "Add Product";
+    document.getElementById('cancel-edit-btn').style.display = 'none';
+    resetProdForm();
+  }
+
+  function resetProdForm() {
     document.getElementById('p-name').value = '';
     document.getElementById('p-price').value = '';
     document.getElementById('p-img-url').value = '';
     document.getElementById('p-img-data').value = '';
     document.getElementById('p-preview').style.display = 'none';
-    
-    renderProds();
   }
 
   function renderProds() {
@@ -275,43 +336,53 @@
             ${p.p ? '<span style="color:#ff007f; font-size:12px;">₹' + p.p + '</span>' : ''}
           </div>
         </div>
-        <button class="del-btn" onclick="delProd(${index})">Delete</button>
+        <div class="btn-group">
+          <button class="edit-btn" onclick="editProd(${index})">Edit</button>
+          <button class="del-btn" onclick="delProd(${index})">Delete</button>
+        </div>
       </div>
     `).join('');
   }
 
   function delProd(index) {
+    if (!confirm("क्या आप सच में इस प्रोडक्ट को डिलीट करना चाहते हैं?")) return;
+    
     let prods = JSON.parse(localStorage.getItem('prods') || "[]");
     prods.splice(index, 1);
     localStorage.setItem('prods', JSON.stringify(prods));
+    
+    if (editingIndex === index) {
+      cancelEdit();
+    }
     renderProds();
   }
 
-  // SAVE ALL DETAILS
   function saveAllDetails() {
+    const ownerName = document.getElementById('o-name').value.trim();
     const ownerImg = document.getElementById('o-photo-data').value.trim();
     const teamImg = document.getElementById('t-photo-data').value.trim();
     const storeName = document.getElementById('s-name').value.trim();
     const mapUrl = document.getElementById('m-url').value.trim();
 
     try {
-      if (ownerImg) localStorage.setItem('o_photo', ownerImg);
+      if (ownerName) {
+        localStorage.setItem('o_name', ownerName);
+        document.getElementById('display-owner-name').innerText = ownerName;
+      }
+      if (ownerImg) {
+        localStorage.setItem('o_photo', ownerImg);
+        document.getElementById('admin-owner-circle').src = ownerImg;
+      }
       if (teamImg) localStorage.setItem('t_photo', teamImg);
       localStorage.setItem('s_name', storeName);
       localStorage.setItem('m_url', mapUrl);
 
-      // Update Circle Image immediately
-      if (ownerImg) {
-        document.getElementById('admin-owner-circle').src = ownerImg;
-      }
-
-      alert("सारी जानकारी सफलतापूर्वक Save हो गई!");
+      alert("सारी जानकारी (ओनर नाम सहित) सफलतापूर्वक Save हो गई!");
     } catch(e) {
-      alert("इमेज साइज ज्यादा बड़ी है! कृपया कोई छोटी इमेज चुनें।");
+      alert("इमेज की साइज बहुत बड़ी है! कृपया गैलरी से छोटी फोटो चुनें।");
     }
   }
 
-  // SAVE PIN
   function savePin() {
     let newPinVal = document.getElementById('new-pin').value.trim();
     if (!newPinVal) {
@@ -328,4 +399,5 @@
   }
 </script>
 </body>
-</html>
+        </html>
+        
