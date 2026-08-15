@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TWINKLE TIME</title>
   <style>
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
     body { background-color: #0c0c14; color: #ffffff; padding-bottom: 30px; }
     .container { max-width: 480px; margin: 0 auto; padding: 12px; }
     
@@ -13,7 +13,11 @@
     .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 4px 14px 4px; }
     .brand { display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 18px; color: #ff007f; letter-spacing: 0.5px; }
     .nav-btns { display: flex; gap: 8px; align-items: center; }
-    .lang-btn { background: #181826; border: 1px solid #2e2e48; color: #a5b4fc; padding: 6px 14px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+    
+    /* Language Select Styling */
+    .lang-select-wrapper { position: relative; }
+    .lang-select { background: #181826; border: 1px solid #2e2e48; color: #a5b4fc; padding: 6px 10px; border-radius: 20px; font-size: 12px; outline: none; cursor: pointer; }
+
     .crown-btn { background: #181826; border: 1px solid #2e2e48; color: #f59e0b; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
 
     /* Purple Hero Banner */
@@ -54,16 +58,48 @@
     .footer { text-align: center; margin-top: 35px; padding-top: 18px; border-top: 1px solid #1a1a29; }
     .footer-title { font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 14px; }
     .email-btn { background: #0f172a; border: 1px solid #2563eb; color: #93c5fd; padding: 9px 20px; border-radius: 24px; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+    
+    /* Google Translate Hide Banner */
+    .goog-te-banner-frame { display: none !important; }
+    body { top: 0px !important; }
+    #google_translate_element { display: none; }
   </style>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'hi', autoDisplay: false}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
+
+<!-- Hidden Google Translate Container -->
+<div id="google_translate_element"></div>
 
 <div class="container">
   <!-- TOP NAVBAR -->
   <div class="navbar">
     <div class="brand">✨ TWINKLE TIME</div>
     <div class="nav-btns">
-      <div class="lang-btn">🌐 English <span>∨</span></div>
+      <div class="lang-select-wrapper">
+        <select class="lang-select" id="language-switcher" onchange="translatePage(this.value)">
+          <option value="en">🌐 English</option>
+          <option value="hi" selected>🌐 Hindi (हिंदी)</option>
+          <option value="pa">🌐 Punjabi (ਪੰਜਾਬੀ)</option>
+          <option value="bho">🌐 Bhojpuri (भोजपुरी)</option>
+          <option value="mr">🌐 Marathi (मराठी)</option>
+          <option value="gu">🌐 Gujarati (ગુજરાતી)</option>
+          <option value="bn">🌐 Bengali (বাংলা)</option>
+          <option value="ta">🌐 Tamil (தமிழ்)</option>
+          <option value="te">🌐 Telugu (తెలుగు)</option>
+          <option value="kn">🌐 Kannada (ಕನ್ನಡ)</option>
+          <option value="ur">🌐 Urdu (اردو)</option>
+          <option value="ml">🌐 Malayalam (മലയാളം)</option>
+          <option value="or">🌐 Odia (ଓଡ଼ିଆ)</option>
+          <option value="as">🌐 Assamese (অসমীয়া)</option>
+          <option value="ne">🌐 Nepali (नेपाली)</option>
+        </select>
+      </div>
       <a href="admin.html" class="crown-btn" title="Admin Panel">👑</a>
     </div>
   </div>
@@ -90,7 +126,7 @@
     <h2 class="section-title">Our Special Products</h2>
   </div>
 
-  <!-- DYNAMIC PRODUCTS LIST (Controlled via Admin) -->
+  <!-- DYNAMIC PRODUCTS LIST -->
   <div id="products-list" class="products-container"></div>
 
   <!-- BEHIND THE PROJECT SECTION -->
@@ -99,7 +135,6 @@
     <h2 style="font-size: 20px; font-weight: 800; margin: 10px 0 4px 0;">Meet Our Creators</h2>
     <p style="font-size: 12px; color: #94a3b8;">जिन होनहार छात्रों ने इस प्रोजेक्ट को मिलकर बनाया है</p>
     
-    <!-- Uploaded Team Photo OR Default Placeholder Box -->
     <img id="team-photo-img" class="team-uploaded-img" alt="Team Photo">
     <div id="team-placeholder-box" class="placeholder-card">
       ✨ ऑनर पैनल (admin.html) में जाकर अपनी टीम की बड़ी फोटो या पोस्टर अपलोड करें!
@@ -128,8 +163,15 @@
 </div>
 
 <script>
+  function translatePage(langCode) {
+    var selectObj = document.querySelector('.goog-te-combo');
+    if (selectObj) {
+      selectObj.value = langCode;
+      selectObj.dispatchEvent(new Event('change'));
+    }
+  }
+
   function renderWebsite() {
-    // 1. Get Products from LocalStorage (Sync with Admin Panel)
     const container = document.getElementById('products-list');
     const storedProds = localStorage.getItem('twinkle_prods');
     
@@ -137,7 +179,6 @@
     if (storedProds !== null) {
       prods = JSON.parse(storedProds);
     } else {
-      // Default Initial Products (Exact match with screenshot)
       prods = [
         { id: 1, n: "Handmade Candle", p: "20", i: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500", desc: "Handmade with creativity & care" },
         { id: 2, n: "Fresh Dosa", p: "30", i: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500", desc: "Fresh • Tasty • Made by our team" },
@@ -147,7 +188,7 @@
     }
 
     if (prods.length === 0) {
-      container.innerHTML = "<p style='text-align:center; color:#94a3b8; padding: 30px; font-size: 14px;'>फिलहाल कोई प्रोडक्ट उपलब्ध नहीं है। एडमिन पैनल से जोड़ें!</p>";
+      container.innerHTML = "<p style='text-align:center; color:#94a3b8; padding: 30px; font-size: 14px;'>फिलहाल कोई प्रोडक्ट उपलब्ध नहीं है।</p>";
     } else {
       container.innerHTML = prods.map(p => {
         let subText = p.desc || "Fresh • Tasty • Made by our team";
@@ -166,19 +207,16 @@
       }).join('');
     }
 
-    // 2. Team Photo Sync
+    // Team Photo Sync
     const teamImg = localStorage.getItem('twinkle_team_photo');
     if (teamImg) {
       const imgEl = document.getElementById('team-photo-img');
       imgEl.src = teamImg;
       imgEl.style.display = 'block';
       document.getElementById('team-placeholder-box').style.display = 'none';
-    } else {
-      document.getElementById('team-photo-img').style.display = 'none';
-      document.getElementById('team-placeholder-box').style.display = 'block';
     }
 
-    // 3. School Name & Maps Link & Email Sync
+    // Store Info Sync
     const schoolName = localStorage.getItem('twinkle_school_name');
     const mapsUrl = localStorage.getItem('twinkle_maps_url');
     const ownerEmail = localStorage.getItem('twinkle_email');
@@ -187,11 +225,7 @@
       document.getElementById('hero-school-text').innerText = '🏫 ' + schoolName;
       document.getElementById('store-school-name').innerText = schoolName;
     }
-
-    if (mapsUrl) {
-      document.getElementById('maps-link-btn').href = mapsUrl;
-    }
-
+    if (mapsUrl) document.getElementById('maps-link-btn').href = mapsUrl;
     if (ownerEmail) {
       document.getElementById('footer-email-text').innerText = ownerEmail;
       document.getElementById('footer-email-link').href = 'mailto:' + ownerEmail;
@@ -202,5 +236,4 @@
 </script>
 
 </body>
-    </html>
-    
+</html>
