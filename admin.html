@@ -6,19 +6,40 @@
   <title>Admin Panel - Twinkle Time</title>
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #0d0d14; color: #ffffff; margin: 0; padding: 20px; }
+    body { background-color: #0d0d14; color: #ffffff; margin: 0; padding: 15px; }
     .container { max-width: 500px; margin: 0 auto; }
-    .card { background: #181824; padding: 22px; border-radius: 14px; margin-bottom: 20px; border: 1px solid #2a2a3a; box-shadow: 0 8px 16px rgba(0,0,0,0.4); }
-    h2, h3 { color: #ff007f; margin-top: 0; margin-bottom: 15px; font-weight: 700; text-align: center; }
-    h3 { text-align: left; }
-    label { font-size: 13px; color: #aaa; margin-top: 10px; display: block; }
-    input { width: 100%; padding: 12px; margin: 6px 0 12px 0; border-radius: 8px; border: 1px solid #333; background: #222230; color: #fff; font-size: 14px; outline: none; }
+    .card { background: #181824; padding: 20px; border-radius: 14px; margin-bottom: 20px; border: 1px solid #2a2a3a; box-shadow: 0 8px 16px rgba(0,0,0,0.4); }
+    
+    /* Owner Header Profile (Admin Only) */
+    .admin-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px; }
+    .owner-circle-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #e91e63; background: #222; }
+    .admin-title { margin: 0; font-size: 20px; color: #ff007f; }
+
+    h2, h3 { color: #ff007f; margin-top: 0; margin-bottom: 12px; font-weight: 700; }
+    label { font-size: 13px; color: #bbb; margin-top: 10px; display: block; font-weight: 600; }
+    
+    input[type="text"], input[type="number"], input[type="password"] {
+      width: 100%; padding: 12px; margin: 6px 0 10px 0; border-radius: 8px; border: 1px solid #333; background: #222230; color: #fff; font-size: 14px; outline: none;
+    }
     input:focus { border-color: #e91e63; }
-    button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.2s; }
-    button:active { transform: scale(0.98); }
+
+    /* Custom File Input Styling */
+    .file-input-wrapper { margin: 6px 0 12px 0; }
+    input[type="file"] { display: none; }
+    .file-btn { display: block; text-align: center; background: #2a2a3d; border: 1px dashed #e91e63; color: #ff85c0; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; }
+    .file-btn:active { background: #3d3d5c; }
+
+    .or-divider { text-align: center; color: #666; font-size: 11px; margin: 4px 0; font-weight: bold; }
+
+    button.primary-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; }
+    button.primary-btn:active { transform: scale(0.98); }
+
     .hidden { display: none; }
-    .product-item { display: flex; justify-content: space-between; align-items: center; background: #222230; padding: 10px 14px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; }
-    .del-btn { width: auto; padding: 6px 12px; background: #e74c3c; font-size: 12px; margin: 0; }
+    .product-item { display: flex; justify-content: space-between; align-items: center; background: #222230; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; }
+    .prod-img-preview { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; margin-right: 10px; }
+    .del-btn { width: auto; padding: 6px 12px; background: #e74c3c; border: none; color: #fff; border-radius: 6px; font-size: 12px; cursor: pointer; }
+    
+    .img-preview-box { width: 100%; height: 100px; border-radius: 8px; object-fit: cover; margin-top: 5px; display: none; border: 1px solid #444; }
   </style>
 </head>
 <body>
@@ -27,14 +48,26 @@
   
   <!-- OWNER LOGIN -->
   <div id="login-sec" class="card">
-    <h2>👑 Owner Login</h2>
+    <h2 style="text-align: center;">👑 Owner Login</h2>
     <input type="password" id="pin" placeholder="Enter Security PIN">
-    <button onclick="checkLogin()">Login</button>
+    <button class="primary-btn" onclick="checkLogin()">Login</button>
   </div>
 
   <!-- ADMIN PANEL -->
   <div id="admin-sec" class="hidden">
     
+    <!-- ADMIN TOP HEADER WITH OWNER CIRCLE PHOTO -->
+    <div class="card">
+      <div class="admin-header">
+        <div>
+          <h2 class="admin-title">Admin Dashboard</h2>
+          <span style="font-size: 11px; color: #888;">Twinkle Time Control</span>
+        </div>
+        <!-- Owner Circle Photo (Only visible in Admin) -->
+        <img id="admin-owner-circle" class="owner-circle-img" src="https://via.placeholder.com/150" alt="Owner Avatar">
+      </div>
+    </div>
+
     <!-- MANAGE PRODUCTS -->
     <div class="card">
       <h3>➕ Manage Products</h3>
@@ -44,89 +77,182 @@
       <label>Price (₹)</label>
       <input type="number" id="p-price" placeholder="e.g. 199">
       
-      <label>Image URL</label>
-      <input type="text" id="p-img" placeholder="https://example.com/image.jpg">
+      <label>Product Image</label>
+      <div class="file-input-wrapper">
+        <label for="p-file" class="file-btn">📁 Choose from Gallery (Auto-Crop/Fit)</label>
+        <input type="file" id="p-file" accept="image/*" onchange="processFile(this, 'p-img-data', 'p-preview')">
+      </div>
+      <div class="or-divider">── OR USE IMAGE URL ──</div>
+      <input type="text" id="p-img-url" placeholder="Paste Image URL" oninput="document.getElementById('p-img-data').value = this.value">
       
-      <button onclick="addProd()">Add Product</button>
+      <input type="hidden" id="p-img-data">
+      <img id="p-preview" class="img-preview-box" alt="Product Preview">
+
+      <button class="primary-btn" onclick="addProd()">Add Product</button>
 
       <div id="p-list" style="margin-top: 15px;"></div>
     </div>
 
     <!-- PROFILE & LOCATION SETTINGS -->
     <div class="card">
-      <h3>🖼️ Profile & Location</h3>
+      <h3>🖼️ Profile & Location Settings</h3>
       
-      <label>Owner Photo URL (Top Circle)</label>
-      <input type="text" id="o-photo" placeholder="Owner Circle Photo URL">
-      
-      <label>Team Photo URL</label>
-      <input type="text" id="t-photo" placeholder="Team/Project Image URL">
-      
-      <label>Store / School Name</label>
+      <!-- Owner Photo (Admin Header) -->
+      <label>1. Owner Photo (For Admin Top Circle Only)</label>
+      <div class="file-input-wrapper">
+        <label for="o-file" class="file-btn">📷 Choose Owner Photo from Gallery</label>
+        <input type="file" id="o-file" accept="image/*" onchange="processFile(this, 'o-photo-data', 'o-preview')">
+      </div>
+      <input type="text" id="o-photo-url" placeholder="Or Paste Owner Image URL" oninput="document.getElementById('o-photo-data').value = this.value">
+      <input type="hidden" id="o-photo-data">
+      <img id="o-preview" class="img-preview-box" alt="Owner Preview">
+
+      <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
+
+      <!-- Team Photo (Website) -->
+      <label>2. Team Photo (Visible on Website)</label>
+      <div class="file-input-wrapper">
+        <label for="t-file" class="file-btn">👥 Choose Team Photo from Gallery</label>
+        <input type="file" id="t-file" accept="image/*" onchange="processFile(this, 't-photo-data', 't-preview')">
+      </div>
+      <input type="text" id="t-photo-url" placeholder="Or Paste Team Image URL" oninput="document.getElementById('t-photo-data').value = this.value">
+      <input type="hidden" id="t-photo-data">
+      <img id="t-preview" class="img-preview-box" alt="Team Preview">
+
+      <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
+
+      <!-- Location -->
+      <label>3. Store / School Name</label>
       <input type="text" id="s-name" placeholder="Enter Name">
       
-      <label>Google Maps Location URL</label>
-      <input type="text" id="m-url" placeholder="Google Maps Link">
+      <label>4. Google Maps Location URL</label>
+      <input type="text" id="m-url" placeholder="Paste Google Maps Link">
       
-      <button onclick="saveAll()">Save Details</button>
+      <button class="primary-btn" onclick="saveAllDetails()">Save Profile & Location</button>
     </div>
 
     <!-- CHANGE PIN SECURITY -->
     <div class="card">
-      <h3>🔑 Change PIN</h3>
+      <h3>🔑 Security</h3>
       <label>New Security PIN</label>
       <input type="password" id="new-pin" placeholder="Enter New PIN">
-      <button onclick="savePin()">Update PIN</button>
+      <button class="primary-btn" onclick="savePin()">Update Security PIN</button>
     </div>
     
-    <button onclick="logout()" style="background: #333; margin-top: 10px;">Logout</button>
+    <button onclick="logout()" style="width: 100%; padding: 12px; background: #333; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 30px;">Logout</button>
   </div>
 
 </div>
 
 <script>
+  // LOGIN CHECK
   function checkLogin() {
     let pinInput = document.getElementById('pin').value;
     let storedPin = localStorage.getItem('my_pin');
     
-    // Master PIN '1234' hiddenly works, or user's custom PIN
     if (pinInput === "1234" || (storedPin && pinInput === storedPin)) {
       document.getElementById('login-sec').classList.add('hidden');
       document.getElementById('admin-sec').classList.remove('hidden');
       loadSavedData();
     } else {
-      alert("गलत PIN! कृपया सही PIN डालें।");
+      alert("गलत PIN! कृपया सही PIN दर्ज करें।");
     }
   }
 
+  // AUTOMATIC IMAGE COMPRESSOR & FIT FUNCTION
+  function processFile(fileInput, targetHiddenId, previewImgId) {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        // Automatic resizing to fix MB issues & auto-fit
+        const canvas = document.createElement('canvas');
+        const maxDimension = 600; // Optimal for mobile local storage
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxDimension) {
+            height *= maxDimension / width;
+            width = maxDimension;
+          }
+        } else {
+          if (height > maxDimension) {
+            width *= maxDimension / height;
+            height = maxDimension;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Compress image to JPEG (Quality 0.7)
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+        // Store compressed image in hidden field
+        document.getElementById(targetHiddenId).value = compressedBase64;
+
+        // Display preview
+        const previewEl = document.getElementById(previewImgId);
+        if (previewEl) {
+          previewEl.src = compressedBase64;
+          previewEl.style.display = 'block';
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // LOAD SAVED DATA
   function loadSavedData() {
-    // Fills existing saved values automatically
-    document.getElementById('o-photo').value = localStorage.getItem('o_photo') || '';
-    document.getElementById('t-photo').value = localStorage.getItem('t_photo') || '';
+    // Owner Circle Photo (Admin Top)
+    const savedOwnerImg = localStorage.getItem('o_photo') || 'https://via.placeholder.com/150';
+    document.getElementById('admin-owner-circle').src = savedOwnerImg;
+    document.getElementById('o-photo-data').value = localStorage.getItem('o_photo') || '';
+    
+    // Team Photo
+    document.getElementById('t-photo-data').value = localStorage.getItem('t_photo') || '';
+    
+    // Store Name & Map
     document.getElementById('s-name').value = localStorage.getItem('s_name') || '';
     document.getElementById('m-url').value = localStorage.getItem('m_url') || '';
     
     renderProds();
   }
 
+  // PRODUCT FUNCTIONS
   function addProd() {
     let name = document.getElementById('p-name').value.trim();
     let price = document.getElementById('p-price').value.trim();
-    let img = document.getElementById('p-img').value.trim();
+    let imgData = document.getElementById('p-img-data').value.trim();
 
     if (!name) {
-      alert("कृपया प्रोडक्ट का नाम दर्ज करें!");
+      alert("कृपया प्रोडक्ट का नाम लिखें!");
       return;
     }
 
     let prods = JSON.parse(localStorage.getItem('prods') || "[]");
-    prods.push({ n: name, p: price, i: img });
-    localStorage.setItem('prods', JSON.stringify(prods));
+    prods.push({ n: name, p: price, i: imgData || 'https://via.placeholder.com/150' });
+    
+    try {
+      localStorage.setItem('prods', JSON.stringify(prods));
+      alert("प्रोडक्ट सफलतापूर्वक जुड़ गया!");
+    } catch(e) {
+      alert("मेमोरी फुल हो गई है, कृपया किसी पुराने प्रोडक्ट को डिलीट करें!");
+    }
 
-    alert("प्रोडक्ट सफलतापूर्वक जुड़ गया!");
+    // Reset Input Fields
     document.getElementById('p-name').value = '';
     document.getElementById('p-price').value = '';
-    document.getElementById('p-img').value = '';
+    document.getElementById('p-img-url').value = '';
+    document.getElementById('p-img-data').value = '';
+    document.getElementById('p-preview').style.display = 'none';
     
     renderProds();
   }
@@ -142,8 +268,12 @@
 
     container.innerHTML = prods.map((p, index) => `
       <div class="product-item">
-        <div>
-          <strong>${p.n}</strong> ${p.p ? '<span style="color:#ff007f;">(₹' + p.p + ')</span>' : ''}
+        <div style="display:flex; align-items:center;">
+          <img src="${p.i || 'https://via.placeholder.com/150'}" class="prod-img-preview" alt="prod">
+          <div>
+            <strong style="font-size:14px; display:block;">${p.n}</strong>
+            ${p.p ? '<span style="color:#ff007f; font-size:12px;">₹' + p.p + '</span>' : ''}
+          </div>
         </div>
         <button class="del-btn" onclick="delProd(${index})">Delete</button>
       </div>
@@ -157,14 +287,31 @@
     renderProds();
   }
 
-  function saveAll() {
-    localStorage.setItem('o_photo', document.getElementById('o-photo').value.trim());
-    localStorage.setItem('t_photo', document.getElementById('t-photo').value.trim());
-    localStorage.setItem('s_name', document.getElementById('s-name').value.trim());
-    localStorage.setItem('m_url', document.getElementById('m-url').value.trim());
-    alert("सारी जानकारी Save हो गई!");
+  // SAVE ALL DETAILS
+  function saveAllDetails() {
+    const ownerImg = document.getElementById('o-photo-data').value.trim();
+    const teamImg = document.getElementById('t-photo-data').value.trim();
+    const storeName = document.getElementById('s-name').value.trim();
+    const mapUrl = document.getElementById('m-url').value.trim();
+
+    try {
+      if (ownerImg) localStorage.setItem('o_photo', ownerImg);
+      if (teamImg) localStorage.setItem('t_photo', teamImg);
+      localStorage.setItem('s_name', storeName);
+      localStorage.setItem('m_url', mapUrl);
+
+      // Update Circle Image immediately
+      if (ownerImg) {
+        document.getElementById('admin-owner-circle').src = ownerImg;
+      }
+
+      alert("सारी जानकारी सफलतापूर्वक Save हो गई!");
+    } catch(e) {
+      alert("इमेज साइज ज्यादा बड़ी है! कृपया कोई छोटी इमेज चुनें।");
+    }
   }
 
+  // SAVE PIN
   function savePin() {
     let newPinVal = document.getElementById('new-pin').value.trim();
     if (!newPinVal) {
