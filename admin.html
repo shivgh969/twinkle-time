@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -6,104 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - Twinkle Time</title>
   <style>
-    body { font-family: sans-serif; background: #0d0d14; color: #fff; padding: 20px; margin: 0; }
-    .container { max-width: 500px; margin: auto; }
-    .card { background: #181824; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; }
-    h2, h3 { color: #ff007f; margin-top: 0; }
-    input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: #fff; box-sizing: border-box; }
-    button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: none; background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; font-weight: bold; cursor: pointer; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #0d0d14; color: #ffffff; margin: 0; padding: 20px; }
+    .container { max-width: 500px; margin: 0 auto; }
+    .card { background: #181824; padding: 22px; border-radius: 14px; margin-bottom: 20px; border: 1px solid #2a2a3a; box-shadow: 0 8px 16px rgba(0,0,0,0.4); }
+    h2, h3 { color: #ff007f; margin-top: 0; margin-bottom: 15px; font-weight: 700; text-align: center; }
+    h3 { text-align: left; }
+    label { font-size: 13px; color: #aaa; margin-top: 10px; display: block; }
+    input { width: 100%; padding: 12px; margin: 6px 0 12px 0; border-radius: 8px; border: 1px solid #333; background: #222230; color: #fff; font-size: 14px; outline: none; }
+    input:focus { border-color: #e91e63; }
+    button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.2s; }
+    button:active { transform: scale(0.98); }
     .hidden { display: none; }
-    .item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 10px; margin: 5px 0; border-radius: 8px; }
+    .product-item { display: flex; justify-content: space-between; align-items: center; background: #222230; padding: 10px 14px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; }
+    .del-btn { width: auto; padding: 6px 12px; background: #e74c3c; font-size: 12px; margin: 0; }
   </style>
 </head>
 <body>
+
 <div class="container">
   
-  <!-- LOGIN -->
+  <!-- OWNER LOGIN -->
   <div id="login-sec" class="card">
     <h2>👑 Owner Login</h2>
-    <input type="password" id="pin" placeholder="Enter PIN (Default: 1234)">
+    <input type="password" id="pin" placeholder="Enter Security PIN">
     <button onclick="checkLogin()">Login</button>
   </div>
 
   <!-- ADMIN PANEL -->
   <div id="admin-sec" class="hidden">
     
-    <!-- PRODUCTS -->
+    <!-- MANAGE PRODUCTS -->
     <div class="card">
       <h3>➕ Manage Products</h3>
-      <input type="text" id="p-name" placeholder="Product Name">
-      <input type="text" id="p-img" placeholder="Image URL">
+      <label>Product Name</label>
+      <input type="text" id="p-name" placeholder="e.g. Handmade Card">
+      
+      <label>Price (₹)</label>
+      <input type="number" id="p-price" placeholder="e.g. 199">
+      
+      <label>Image URL</label>
+      <input type="text" id="p-img" placeholder="https://example.com/image.jpg">
+      
       <button onclick="addProd()">Add Product</button>
-      <div id="p-list" style="margin-top:10px;"></div>
+
+      <div id="p-list" style="margin-top: 15px;"></div>
     </div>
 
-    <!-- PROFILE & LOCATION -->
+    <!-- PROFILE & LOCATION SETTINGS -->
     <div class="card">
       <h3>🖼️ Profile & Location</h3>
-      <input type="text" id="o-photo" placeholder="Owner Photo URL (Circle)">
-      <input type="text" id="t-photo" placeholder="Team Photo URL">
-      <input type="text" id="s-name" placeholder="Store/School Name">
-      <input type="text" id="m-url" placeholder="Google Maps URL">
-      <button onclick="saveAll()">Save All Details</button>
+      
+      <label>Owner Photo URL (Top Circle)</label>
+      <input type="text" id="o-photo" placeholder="Owner Circle Photo URL">
+      
+      <label>Team Photo URL</label>
+      <input type="text" id="t-photo" placeholder="Team/Project Image URL">
+      
+      <label>Store / School Name</label>
+      <input type="text" id="s-name" placeholder="Enter Name">
+      
+      <label>Google Maps Location URL</label>
+      <input type="text" id="m-url" placeholder="Google Maps Link">
+      
+      <button onclick="saveAll()">Save Details</button>
     </div>
 
-    <!-- PIN -->
+    <!-- CHANGE PIN SECURITY -->
     <div class="card">
-      <h3>🔑 Security</h3>
-      <input type="password" id="new-pin" placeholder="New PIN">
-      <button onclick="savePin()">Change PIN</button>
+      <h3>🔑 Change PIN</h3>
+      <label>New Security PIN</label>
+      <input type="password" id="new-pin" placeholder="Enter New PIN">
+      <button onclick="savePin()">Update PIN</button>
     </div>
     
-    <button onclick="location.reload()" style="background:#444;">Logout</button>
+    <button onclick="logout()" style="background: #333; margin-top: 10px;">Logout</button>
   </div>
+
 </div>
 
 <script>
   function checkLogin() {
-    let pin = document.getElementById('pin').value;
-    if(pin == "1234" || pin == localStorage.getItem('my_pin')) {
+    let pinInput = document.getElementById('pin').value;
+    let storedPin = localStorage.getItem('my_pin');
+    
+    // Master PIN '1234' hiddenly works, or user's custom PIN
+    if (pinInput === "1234" || (storedPin && pinInput === storedPin)) {
       document.getElementById('login-sec').classList.add('hidden');
       document.getElementById('admin-sec').classList.remove('hidden');
-      renderProds();
-    } else { alert("गलत PIN!"); }
+      loadSavedData();
+    } else {
+      alert("गलत PIN! कृपया सही PIN डालें।");
+    }
+  }
+
+  function loadSavedData() {
+    // Fills existing saved values automatically
+    document.getElementById('o-photo').value = localStorage.getItem('o_photo') || '';
+    document.getElementById('t-photo').value = localStorage.getItem('t_photo') || '';
+    document.getElementById('s-name').value = localStorage.getItem('s_name') || '';
+    document.getElementById('m-url').value = localStorage.getItem('m_url') || '';
+    
+    renderProds();
   }
 
   function addProd() {
+    let name = document.getElementById('p-name').value.trim();
+    let price = document.getElementById('p-price').value.trim();
+    let img = document.getElementById('p-img').value.trim();
+
+    if (!name) {
+      alert("कृपया प्रोडक्ट का नाम दर्ज करें!");
+      return;
+    }
+
     let prods = JSON.parse(localStorage.getItem('prods') || "[]");
-    prods.push({n: document.getElementById('p-name').value, i: document.getElementById('p-img').value});
+    prods.push({ n: name, p: price, i: img });
     localStorage.setItem('prods', JSON.stringify(prods));
-    alert("प्रोडक्ट जुड़ गया!");
+
+    alert("प्रोडक्ट सफलतापूर्वक जुड़ गया!");
     document.getElementById('p-name').value = '';
+    document.getElementById('p-price').value = '';
     document.getElementById('p-img').value = '';
+    
     renderProds();
   }
 
   function renderProds() {
     let prods = JSON.parse(localStorage.getItem('prods') || "[]");
-    document.getElementById('p-list').innerHTML = prods.map((p,i) => `
-      <div class="item"><span>${p.n}</span><button onclick="del(${i})" style="width:auto; padding:5px; background:red;">Delete</button></div>
+    let container = document.getElementById('p-list');
+    
+    if (prods.length === 0) {
+      container.innerHTML = "<p style='color:#777; font-size:13px; text-align:center;'>कोई प्रोडक्ट नहीं है</p>";
+      return;
+    }
+
+    container.innerHTML = prods.map((p, index) => `
+      <div class="product-item">
+        <div>
+          <strong>${p.n}</strong> ${p.p ? '<span style="color:#ff007f;">(₹' + p.p + ')</span>' : ''}
+        </div>
+        <button class="del-btn" onclick="delProd(${index})">Delete</button>
+      </div>
     `).join('');
   }
 
-  function del(i) {
-    let prods = JSON.parse(localStorage.getItem('prods'));
-    prods.splice(i, 1);
+  function delProd(index) {
+    let prods = JSON.parse(localStorage.getItem('prods') || "[]");
+    prods.splice(index, 1);
     localStorage.setItem('prods', JSON.stringify(prods));
     renderProds();
   }
 
   function saveAll() {
-    localStorage.setItem('o_photo', document.getElementById('o-photo').value);
-    localStorage.setItem('t_photo', document.getElementById('t-photo').value);
-    localStorage.setItem('s_name', document.getElementById('s-name').value);
-    localStorage.setItem('m_url', document.getElementById('m-url').value);
+    localStorage.setItem('o_photo', document.getElementById('o-photo').value.trim());
+    localStorage.setItem('t_photo', document.getElementById('t-photo').value.trim());
+    localStorage.setItem('s_name', document.getElementById('s-name').value.trim());
+    localStorage.setItem('m_url', document.getElementById('m-url').value.trim());
     alert("सारी जानकारी Save हो गई!");
   }
 
   function savePin() {
-    localStorage.setItem('my_pin', document.getElementById('new-pin').value);
-    alert("PIN बदल गया!");
+    let newPinVal = document.getElementById('new-pin').value.trim();
+    if (!newPinVal) {
+      alert("कृपया नया PIN दर्ज करें!");
+      return;
+    }
+    localStorage.setItem('my_pin', newPinVal);
+    alert("PIN सफलतापूर्वक बदल गया!");
+    document.getElementById('new-pin').value = '';
+  }
+
+  function logout() {
+    location.reload();
   }
 </script>
 </body>
