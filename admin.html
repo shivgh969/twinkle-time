@@ -8,58 +8,140 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
     body { background-color: #0c0c14; color: #ffffff; padding: 20px 12px; }
     .container { max-width: 500px; margin: 0 auto; }
-    h1 { font-size: 22px; color: #ec4899; text-align: center; margin-bottom: 20px; }
+    
+    /* Security Lock Screen */
+    #lock-screen { position: fixed; top:0; left:0; width:100%; height:100%; background:#0c0c14; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px; text-align:center; }
+    .lock-box { background:#141420; border:1px solid #232336; padding:30px 20px; border-radius:24px; width:100%; max-width:360px; box-shadow:0 10px 30px rgba(0,0,0,0.8); }
+    
+    /* Top Admin Profile Header */
+    .admin-header-card { background: linear-gradient(135deg, #1e1233 0%, #141420 100%); border: 1px solid #3b2354; border-radius: 20px; padding: 18px; text-align: center; margin-bottom: 20px; }
+    .admin-avatar { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 3px solid #ec4899; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4); margin: 0 auto 10px auto; display: block; }
+    .admin-name { font-size: 18px; font-weight: 800; color: #ffffff; }
+    .admin-role { font-size: 12px; color: #c084fc; font-weight: 600; margin-top: 2px; }
+
     .card { background: #141420; border: 1px solid #232336; border-radius: 18px; padding: 18px; margin-bottom: 20px; }
-    .card h2 { font-size: 16px; color: #c084fc; margin-bottom: 12px; border-bottom: 1px solid #232336; padding-bottom: 6px; }
+    .card h2 { font-size: 15px; color: #c084fc; margin-bottom: 12px; border-bottom: 1px solid #232336; padding-bottom: 6px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+    
     label { font-size: 12px; color: #94a3b8; display: block; margin: 10px 0 4px 0; }
-    input { width: 100%; padding: 10px; background: #1a1a28; border: 1px solid #2e2e48; border-radius: 8px; color: white; font-size: 13px; }
-    button { width: 100%; padding: 12px; background: linear-gradient(90deg, #9333ea, #db2777); border: none; border-radius: 25px; color: white; font-weight: bold; margin-top: 14px; cursor: pointer; }
-    .prod-item { display: flex; align-items: center; justify-content: space-between; background: #1a1a28; padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 13px; }
-    .del-btn { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; width: auto; margin-top: 0; }
-    .back-btn { display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 10px 18px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
+    input[type="text"], input[type="number"], input[type="password"] { width: 100%; padding: 10px 12px; background: #1a1a28; border: 1px solid #2e2e48; border-radius: 10px; color: white; font-size: 13px; outline: none; }
+    input[type="file"] { background: #1a1a28; color: #94a3b8; padding: 8px; border-radius: 10px; border: 1px dashed #3b3b5c; width: 100%; font-size: 12px; cursor: pointer; }
+    
+    button { width: 100%; padding: 12px; background: linear-gradient(90deg, #9333ea, #db2777); border: none; border-radius: 25px; color: white; font-weight: bold; margin-top: 14px; cursor: pointer; font-size: 13px; }
+    
+    /* Order Cards in Admin */
+    .order-card { background: #1a1a28; border: 1px solid #2e2e48; border-radius: 14px; padding: 14px; margin-bottom: 12px; font-size: 12px; position: relative; }
+    .order-header { display: flex; justify-content: space-between; border-bottom: 1px solid #2e2e48; padding-bottom: 8px; margin-bottom: 8px; }
+    .order-id { font-weight: 800; color: #f472b6; }
+    .order-status { font-weight: 700; padding: 2px 8px; border-radius: 10px; font-size: 11px; background: #3b2854; color: #c084fc; }
+    .order-status.delivered { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+
+    .action-btns { display: flex; gap: 6px; margin-top: 10px; }
+    .action-btn { flex: 1; padding: 8px; border-radius: 10px; font-size: 11px; font-weight: bold; text-decoration: none; text-align: center; border: none; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; gap: 4px; }
+    .btn-call { background: #2563eb; color: white; }
+    .btn-wa { background: #10b981; color: white; }
+    .btn-del { background: #ef4444; color: white; width: auto; padding: 8px 12px; margin-top: 0; }
+
+    .prod-item { display: flex; align-items: center; justify-content: space-between; background: #1a1a28; padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; }
+    .del-btn { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; width: auto; margin-top: 0; }
+    .back-btn { display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
+    .or-divider { text-align: center; color: #64748b; font-size: 11px; margin: 8px 0; font-weight: bold; }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <a href="index.html" class="back-btn">⬅️ वेबसाइट पर वापस जाएं</a>
-  <h1>👑 TWINKLE TIME - Owner Panel</h1>
+<!-- 🔒 SECURITY LOCK OVERLAY -->
+<div id="lock-screen">
+  <div class="lock-box">
+    <div style="font-size: 40px; margin-bottom: 10px;">👑</div>
+    <h2 style="font-size: 18px; color: #ffffff; margin-bottom: 6px;">Admin Access Locked</h2>
+    <p style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">प्रवेश करने के लिए एडमिन PIN दर्ज करें</p>
+    <input type="password" id="pin-input" placeholder="Enter PIN (Default: 1234)" style="text-align: center; font-size: 16px; letter-spacing: 4px;">
+    <button onclick="unlockAdmin()">Unlock Panel 🔓</button>
+  </div>
+</div>
 
-  <!-- 1. Add / Edit Products -->
+<div class="container" id="admin-main-content" style="display:none;">
+  <a href="index.html" class="back-btn">⬅️ मुख्य वेबसाइट पर जाएं</a>
+
+  <!-- 👤 ADMIN PROFILE CARD -->
+  <div class="admin-header-card">
+    <img id="admin-avatar-img" src="https://via.placeholder.com/150" class="admin-avatar" alt="Admin Profile">
+    <div class="admin-name" id="admin-name-txt">Owner / Admin</div>
+    <div class="admin-role">✨ Twinkle Time Chief Executive</div>
+  </div>
+
+  <!-- 📦 LIVE CUSTOMER ORDERS SECTION -->
+  <div class="card" style="border: 1px solid #10b981;">
+    <h2 style="color: #10b981;">
+      <span>📦 प्राप्त हुए ऑर्डर (Orders)</span>
+      <span id="order-count-badge" style="background:#10b981; color:black; padding:2px 8px; border-radius:12px; font-size:11px;">0</span>
+    </h2>
+    <div id="admin-orders-list"></div>
+    <button onclick="clearAllOrders()" style="background:#ef4444; font-size:11px; padding:8px; margin-top:8px;">🗑️ सभी ऑर्डर साफ़ करें</button>
+  </div>
+
+  <!-- 👤 UPDATE ADMIN PROFILE -->
+  <div class="card">
+    <h2>👤 एडमिन प्रोफाइल फोटो व नाम बदलें</h2>
+    <label>एडमिन का नाम:</label>
+    <input type="text" id="edit-admin-name" placeholder="उदा: Rahul Kumar">
+    
+    <label>📁 गैलरी से अपनी गोल फोटो चुनें:</label>
+    <input type="file" id="admin-photo-file" accept="image/*">
+    <div class="or-divider">अथवा (URL दर्ज करें)</div>
+    <input type="text" id="admin-photo-url" placeholder="https://...">
+
+    <button onclick="updateAdminProfile()">👤 प्रोफाइल अपडेट करें</button>
+  </div>
+
+  <!-- 🔐 CHANGE PIN CODE -->
+  <div class="card">
+    <h2>🔐 नया Security PIN सेट करें</h2>
+    <label>नया PIN दर्ज करें:</label>
+    <input type="password" id="new-pin-input" placeholder="उदा: 5678">
+    <p style="font-size: 10px; color: #64748b; margin-top: 4px;">* मास्टर PIN (1234) हमेशा काम करेगा।</p>
+    <button onclick="changePin()">🔐 PIN सेव करें</button>
+  </div>
+
+  <!-- 🛍️ ADD PRODUCT -->
   <div class="card">
     <h2>🛍️ नया प्रोडक्ट जोड़ें</h2>
-    <label>प्रोडक्ट का नाम (उदा. Samosa):</label>
+    <label>प्रोडक्ट का नाम:</label>
     <input type="text" id="p-name" placeholder="जैसे: Samosa">
     
     <label>कीमत (₹):</label>
     <input type="number" id="p-price" placeholder="जैसे: 20">
-    
-    <label>फोटो का लिंक (Image URL):</label>
+
+    <label>📁 गैलरी से फोटो चुनें:</label>
+    <input type="file" id="p-file" accept="image/*">
+    <div class="or-divider">अथवा (इमेज URL दर्ज करें)</div>
     <input type="text" id="p-img" placeholder="https://...">
 
-    <label>डिस्क्रिप्शन (उदा. Crispy and delicious snacks):</label>
+    <label>डिस्क्रिप्शन:</label>
     <input type="text" id="p-desc" placeholder="जैसे: Crispy and delicious snacks">
 
     <button onclick="addProduct()">➕ प्रोडक्ट सेव करें</button>
   </div>
 
-  <!-- 2. Manage Products List (Delete Option) -->
+  <!-- 🗑️ DELETE PRODUCTS -->
   <div class="card">
     <h2>🗑️ प्रोडक्ट डिलीट करें</h2>
     <div id="admin-prod-list"></div>
   </div>
 
-  <!-- 3. Team Photo Upload -->
+  <!-- 📸 TEAM POSTER -->
   <div class="card">
-    <h2>📸 Team Photo / Poster अपलोड करें</h2>
-    <label>टीम फोटो की इमेज का URL डालें:</label>
+    <h2>📸 Team Photo / Poster अपडेट करें</h2>
+    <label>📁 गैलरी से टीम फोटो चुनें:</label>
+    <input type="file" id="team-file" accept="image/*">
+    <div class="or-divider">अथवा (URL दर्ज करें)</div>
     <input type="text" id="team-photo-url" placeholder="https://...">
-    <button onclick="saveTeamPhoto()">🖼️ फोटो अपडेट करें</button>
+    <button onclick="saveTeamPhoto()">🖼️ टीम फोटो अपडेट करें</button>
   </div>
 
-  <!-- 4. Store Info Update -->
+  <!-- 🏫 STORE INFO -->
   <div class="card">
-    <h2>🏫 स्कूल व स्टोर की जानकारी</h2>
+    <h2>🏫 स्कूल व स्टोर विवरण</h2>
     <label>स्कूल का नाम:</label>
     <input type="text" id="school-name-input" placeholder="Government Senior Secondary School Mubarakpur">
 
@@ -71,12 +153,97 @@
 
     <button onclick="saveStoreDetails()">💾 विवरण सेव करें</button>
   </div>
+
 </div>
 
 <script>
+  const MASTER_PIN = "1234";
+
+  function unlockAdmin() {
+    const input = document.getElementById('pin-input').value;
+    const customPin = localStorage.getItem('twinkle_custom_pin');
+
+    if (input === MASTER_PIN || (customPin && input === customPin)) {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('admin-main-content').style.display = 'block';
+      renderOrders();
+    } else {
+      alert("❌ गलत PIN! सही पिन दर्ज करें।");
+    }
+  }
+
+  function renderOrders() {
+    const orders = JSON.parse(localStorage.getItem('twinkle_orders') || "[]");
+    const container = document.getElementById('admin-orders-list');
+    document.getElementById('order-count-badge').innerText = orders.length;
+
+    if (orders.length === 0) {
+      container.innerHTML = "<p style='color:#94a3b8; text-align:center; padding:15px; font-size:12px;'>कोई ऑर्डर प्राप्त नहीं हुआ है।</p>";
+      return;
+    }
+
+    container.innerHTML = orders.map((o, idx) => `
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-id">#${o.id}</span>
+          <span class="order-status ${o.status.includes('Delivered') ? 'delivered' : ''}" onclick="toggleOrderStatus(${idx})">
+            ${o.status} (क्लिक करके बदलें)
+          </span>
+        </div>
+        <div><b>तारीख:</b> ${o.date}</div>
+        <div><b>सामान:</b> ${o.productName} (${o.qty} नग)</div>
+        <div><b>कुल बिल:</b> <span style="color:#10b981; font-weight:bold;">₹${o.totalPrice}</span></div>
+        <hr style="border:0; border-top:1px solid #2e2e48; margin:6px 0;">
+        <div><b>ग्राहक:</b> ${o.customerName}</div>
+        <div><b>नंबर:</b> ${o.customerPhone}</div>
+        <div><b>पता/विवरण:</b> ${o.customerAddress}</div>
+        
+        <div class="action-btns">
+          <a href="tel:${o.customerPhone}" class="action-btn btn-call">📞 Call</a>
+          <a href="https://wa.me/91${o.customerPhone}?text=नमस्ते ${o.customerName}, आपके Twinkle Time ऑर्डर #${o.id} के संदर्भ में:" target="_blank" class="action-btn btn-wa">💬 WhatsApp</a>
+          <button class="action-btn btn-del" onclick="deleteOrder(${idx})">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleOrderStatus(index) {
+    const orders = JSON.parse(localStorage.getItem('twinkle_orders') || "[]");
+    if (orders[index].status.includes('Pending')) {
+      orders[index].status = 'Delivered ✅';
+    } else {
+      orders[index].status = 'Pending ⏳';
+    }
+    localStorage.setItem('twinkle_orders', JSON.stringify(orders));
+    renderOrders();
+  }
+
+  function deleteOrder(index) {
+    if (confirm("क्या आप इस ऑर्डर को हटाना चाहते हैं?")) {
+      const orders = JSON.parse(localStorage.getItem('twinkle_orders') || "[]");
+      orders.splice(index, 1);
+      localStorage.setItem('twinkle_orders', JSON.stringify(orders));
+      renderOrders();
+    }
+  }
+
+  function clearAllOrders() {
+    if (confirm("क्या आप सभी ऑर्डर डिलीट करना चाहते हैं?")) {
+      localStorage.removeItem('twinkle_orders');
+      renderOrders();
+    }
+  }
+
+  function changePin() {
+    const newPin = document.getElementById('new-pin-input').value.trim();
+    if (!newPin) { alert("कृपया PIN दर्ज करें!"); return; }
+    localStorage.setItem('twinkle_custom_pin', newPin);
+    alert("✅ नया PIN सफलतापूर्वक सेट हो गया!");
+    document.getElementById('new-pin-input').value = '';
+  }
+
   function getProds() {
-    const p = localStorage.getItem('twinkle_prods');
-    return p ? JSON.parse(p) : [];
+    return JSON.parse(localStorage.getItem('twinkle_prods') || "[]");
   }
 
   function renderAdminProds() {
@@ -97,11 +264,24 @@
   function addProduct() {
     const n = document.getElementById('p-name').value.trim();
     const p = document.getElementById('p-price').value.trim();
-    const i = document.getElementById('p-img').value.trim();
+    const urlImg = document.getElementById('p-img').value.trim();
+    const fileImg = document.getElementById('p-file').files[0];
     const desc = document.getElementById('p-desc').value.trim();
 
     if (!n) { alert("कृपया प्रोडक्ट का नाम दर्ज करें!"); return; }
 
+    if (fileImg) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        saveProductData(n, p, e.target.result, desc);
+      };
+      reader.readAsDataURL(fileImg);
+    } else {
+      saveProductData(n, p, urlImg, desc);
+    }
+  }
+
+  function saveProductData(n, p, i, desc) {
     const prods = getProds();
     prods.push({ id: Date.now(), n, p, i, desc });
     localStorage.setItem('twinkle_prods', JSON.stringify(prods));
@@ -109,6 +289,7 @@
     document.getElementById('p-name').value = '';
     document.getElementById('p-price').value = '';
     document.getElementById('p-img').value = '';
+    document.getElementById('p-file').value = '';
     document.getElementById('p-desc').value = '';
     
     renderAdminProds();
@@ -125,9 +306,48 @@
 
   function saveTeamPhoto() {
     const url = document.getElementById('team-photo-url').value.trim();
-    if (!url) { alert("फोटो URL डालें!"); return; }
-    localStorage.setItem('twinkle_team_photo', url);
-    alert("✅ टीम फोटो अपडेट हो गई!");
+    const file = document.getElementById('team-file').files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        localStorage.setItem('twinkle_team_photo', e.target.result);
+        alert("✅ टीम फोटो अपडेट हो गई!");
+      };
+      reader.readAsDataURL(file);
+    } else if (url) {
+      localStorage.setItem('twinkle_team_photo', url);
+      alert("✅ टीम फोटो अपडेट हो गई!");
+    } else {
+      alert("कृपया फोटो चुनें या URL डालें!");
+    }
+  }
+
+  function updateAdminProfile() {
+    const name = document.getElementById('edit-admin-name').value.trim();
+    const url = document.getElementById('admin-photo-url').value.trim();
+    const file = document.getElementById('admin-photo-file').files[0];
+
+    if (name) {
+      localStorage.setItem('twinkle_admin_name', name);
+      document.getElementById('admin-name-txt').innerText = name;
+    }
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        localStorage.setItem('twinkle_admin_avatar', e.target.result);
+        document.getElementById('admin-avatar-img').src = e.target.result;
+        alert("✅ एडमिन प्रोफाइल अपडेट हो गई!");
+      };
+      reader.readAsDataURL(file);
+    } else if (url) {
+      localStorage.setItem('twinkle_admin_avatar', url);
+      document.getElementById('admin-avatar-img').src = url;
+      alert("✅ एडमिन प्रोफाइल अपडेट हो गई!");
+    } else if (name) {
+      alert("✅ एडमिन का नाम अपडेट हो गया!");
+    }
   }
 
   function saveStoreDetails() {
@@ -139,11 +359,18 @@
     if (mu) localStorage.setItem('twinkle_maps_url', mu);
     if (em) localStorage.setItem('twinkle_email', em);
 
-    alert("✅ स्कूल व लोकेशन डिटेल्स सेव हो गईं!");
+    alert("✅ विवरण सुरक्षित कर लिए गए हैं!");
   }
 
   window.onload = function() {
     renderAdminProds();
+    
+    const adminName = localStorage.getItem('twinkle_admin_name') || 'Owner / Admin';
+    const adminAvatar = localStorage.getItem('twinkle_admin_avatar') || 'https://via.placeholder.com/150';
+    document.getElementById('admin-name-txt').innerText = adminName;
+    document.getElementById('edit-admin-name').value = adminName;
+    document.getElementById('admin-avatar-img').src = adminAvatar;
+
     document.getElementById('team-photo-url').value = localStorage.getItem('twinkle_team_photo') || '';
     document.getElementById('school-name-input').value = localStorage.getItem('twinkle_school_name') || 'Government Senior Secondary School Mubarakpur';
     document.getElementById('maps-url-input').value = localStorage.getItem('twinkle_maps_url') || '';
